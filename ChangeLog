@@ -1,4 +1,7 @@
 2005-03-03(jol):
+	- Add a begin to the interface (only a transparent background with its container).
+	- Its just a first look at the evas and esmart api.
+	- Update configure.ac to check for evas, esmart abd edje.
 	- Fix a problem inside the xmpp_im_contact_remove_all_group.
 	- Add xmpp_jid_get_bar and xmpp_jid_get_full.
 	- Add GPL license within some files.

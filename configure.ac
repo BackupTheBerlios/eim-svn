@@ -5,10 +5,10 @@ AC_INIT(configure.ac)
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
-AC_ISC_POSIX
 AM_INIT_AUTOMAKE(eim, 0.0.1)
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(src/config.h)
 
+AC_ISC_POSIX
 AC_PROG_CC
 AM_PROG_CC_STDC
 AC_HEADER_STDC
@@ -16,6 +16,23 @@ AC_C_CONST
 AM_ENABLE_SHARED
 AM_PROG_LIBTOOL
 AC_FUNC_ALLOCA
+
+
+dnl AC_EXPAND_DIR(PACKAGE_DATA_DIR, "$datadir/${PACKAGE}")
+dnl AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "$PACKAGE_DATA_DIR")
+
+dnl if test "x${prefix}" = "xNONE"; then
+dnl 	AC_DEFINE_UNQUOTED(PREFIX, "/usr/local/")
+dnl else
+dnl 	AC_DEFINE_UNQUOTED(PREFIX, "${prefix}")
+dnl fi
+
+dnl AC_EXPAND_DIR(PACKAGE_CFG_DIR, "$sysconfdir")
+dnl AC_DEFINE_UNQUOTED(PACKAGE_CFG_DIR, "$PACKAGE_CFG_DIR")
+
+dnl Set PACKAGE_SOURCE_DIR in config.h.
+dnl packagesrcdir=`cd $srcdir && pwd`
+dnl AC_DEFINE_UNQUOTED(PACKAGE_SOURCE_DIR, "${packagesrcdir}")
 
 
 
@@ -36,7 +53,36 @@ ecore_cflags=`ecore-config --cflags`
 AC_SUBST(ecore_libs)
 AC_SUBST(ecore_cflags)
 
+dnl Check for edje
+AC_PATH_GENERIC(edje, 0.5.0, [
+  AC_SUBST(edje_libs)
+	AC_SUBST(edje_cflags) ],
+	AC_MSG_ERROR(Cannot find edje: Is edje-config in path?))
+edje_libs=`edje-config --libs`
+edje_cflags=`edje-config --cflags`
+AC_SUBST(edje_libs)
+AC_SUBST(edje_cflags)
 
+dnl Check for esmart
+AC_PATH_GENERIC(esmart, 0.9.0, [
+  AC_SUBST(esmart_libs)
+	AC_SUBST(esmart_cflags) ],
+	AC_MSG_ERROR(Cannot find esmart: Is esmart-config in path?))
+esmart_libs=`esmart-config --libs`
+esmart_cflags=`esmart-config --cflags`
+AC_SUBST(esmart_libs)
+AC_SUBST(esmart_cflags)
+
+
+dnl Check for evas
+AC_PATH_GENERIC(evas, 0.9.0, [
+  AC_SUBST(evas_libs)
+	AC_SUBST(evas_cflags) ],
+	AC_MSG_ERROR(Cannot find evas: Is evas-config in path?))
+evas_libs=`evas-config --libs`
+evas_cflags=`evas-config --cflags`
+AC_SUBST(evas_libs)
+AC_SUBST(evas_cflags)
 
 dnl Check for expat
 EXPAT_INCLUDE=""
@@ -77,5 +123,6 @@ src/Makefile
 src/egxp/Makefile
 src/xmpp/Makefile
 src/xmpp-im/Makefile
+src/gui/Makefile
 doc/Makefile
 ])
