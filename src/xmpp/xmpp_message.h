@@ -18,16 +18,16 @@
    along with Eim; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef xmpp_opcode_header_h_
-#define xmpp_opcode_header_h_
+#ifndef xmpp_message_header_h_
+#define xmpp_message_header_h_
 
-#include "egxp/egxp_node_struct.h"
-
+#include "xmpp_struct.h"
 
 /**
- * Stream begin callback
+ * It defines the messages send to the server.
+ * @param x: The Xmpp structure
  */
-void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg);
+int xmpp_message_stream (Xmpp * x);
 
 
 #endif

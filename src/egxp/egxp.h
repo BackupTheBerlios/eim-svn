@@ -23,6 +23,7 @@
 #define egxp_header_h_
 
 #include <Ecore_Data.h>
+#include <Ecore.h>
 
 #include "egxp_node_struct.h"
 #include "egxp_node.h"
@@ -30,7 +31,7 @@
 #include "egxp_condition.h"
 #include "egxp_message.h"
 #include "egxp_protocol_handler.h"
-
+#include "egxp_connection.h"
 
 typedef struct _Egxp Egxp;
 #define EGXP(o) ((Egxp*)o)
@@ -44,18 +45,29 @@ struct _Egxp {
   /* the protocol handler */
   Egxp_ProtocolHandler * protocol_handler;
 
+  /* The connection object */
+  Egxp_Connection * connection;
+  
   /* contains data */
   Ecore_Hash * extensions;
 
   /* specific user data */
   void * user_data;
+
+  /* Event handler of ecore server 
+     maybe it's not necessary to store it
+  */
+  Ecore_Event_Handler * receive_cb;
 };
 
 
 typedef struct _Egxp_Extension Egxp_Extension;
 #define EGXP_EXTENSION(o) ((Egxp_Extension*)o)
 struct _Egxp_Extension {
+  /* this call back is used to destroy this structure itself. */
   Ecore_Free_Cb destroy;
+  /* a pointer to the egxp structure */
+  Egxp * parent;
 };
 
 

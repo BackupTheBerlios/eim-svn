@@ -18,16 +18,38 @@
    along with Eim; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef xmpp_opcode_header_h_
-#define xmpp_opcode_header_h_
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#include "egxp/egxp_node_struct.h"
+#include <Ecore_Data.h>
 
-
-/**
- * Stream begin callback
- */
-void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg);
+#include "xmpp_jid.h"
 
 
-#endif
+Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_jid_new\n");
+#endif 
+  
+  Xmpp_JID * tmp = XMPP_JID(malloc (sizeof(Xmpp_JID)));
+  
+  tmp->user = strdup (user);
+  tmp->host = strdup (host);
+  tmp->resource = strdup (resource);
+
+  return tmp;
+}
+
+void xmpp_jid_free (Xmpp_JID * jid) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_jid_free\n");
+#endif 
+  assert (jid);
+
+  IF_FREE (jid->user);
+  IF_FREE (jid->host);
+  IF_FREE (jid->resource);
+
+  FREE (jid);
+}

@@ -15,11 +15,15 @@ pkgincludeinput_HEADERS= \
 	xmpp_opcode.h    \
 	xmpp_callback.h  \
 	xmpp_struct.h    \
-	xmpp.h
+	xmpp.h           \
+	xmpp_jid.h       \
+	xmpp_message.h
 
 libxmpp_la_SOURCES = \
 	xmpp_opcode.c    \
 	xmpp_callback.c  \
-	xmpp.c
+	xmpp.c           \
+	xmpp_jid.c       \
+	xmpp_message.c
 
 libxmpp_la_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS) $(EXPAT_INCLUDE) -I$(top_srcdir)/src

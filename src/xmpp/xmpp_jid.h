@@ -18,16 +18,35 @@
    along with Eim; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef xmpp_opcode_header_h_
-#define xmpp_opcode_header_h_
+#ifndef xmpp_jid_header_h_
+#define xmpp_jid_header_h_
 
-#include "egxp/egxp_node_struct.h"
+/**
+ * Here we define the Jid structure and a set of function
+ * to handle the jid
+ */
+
+typedef struct _Xmpp_JID Xmpp_JID;
+#define XMPP_JID(o) ((Xmpp_JID*)o)
+struct _Xmpp_JID {
+  char * user;
+  char * host;
+  char * resource;
+};
 
 
 /**
- * Stream begin callback
+ * Create a new JID
+ * @param user: The user name
+ * @param host: The host name
+ * @param resource: The resource
  */
-void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg);
+Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource);
+
+/**
+ * Free the structure
+ */
+void xmpp_jid_free (Xmpp_JID * jid);
 
 
 #endif

@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include "egxp.h"
 
+typedef int (*Handler_Func) (void *data, int type, void *event);
+
 Egxp * egxp_new () {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_new\n");
@@ -41,6 +43,14 @@ Egxp * egxp_new () {
   /* define the protocol handler */
   tmp->protocol_handler = egxp_protocol_handler_new (tmp);
 
+  /* register the callback function */
+  tmp->receive_cb = ecore_event_handler_add (ECORE_CON_EVENT_SERVER_DATA,
+					     (Handler_Func) egxp_protocol_handler_receive_server_cb,
+					     tmp);
+  
+  /* initialize the connection */
+  tmp->connection = NULL;
+
   /* initialzie extension */
   tmp->extensions = NULL;
 
@@ -55,13 +65,16 @@ void egxp_free (Egxp * e) {
   assert (e);
   /* free opcode */
   egxp_opcode_free (e->opcodes);
+  /* remove the event handler of the server */
+  if (e->receive_cb) ecore_event_handler_del (e->receive_cb);
   /* free node */
   if (e->root) egxp_node_free(e->root);
   /* free protocol handler */
   if (e->protocol_handler) egxp_protocol_handler_free (e->protocol_handler);
+  /* free connection */
+  if (e->connection) egxp_connection_free (e->connection);
   /* free extension */
   if (e->extensions) ecore_hash_destroy (e->extensions);
-  
   free (e);
 }
 
@@ -87,6 +100,9 @@ void egxp_extension_register (Egxp * e, int id, void * ext) {
     ecore_hash_set_free_value (e->extensions, egxp_extension_free);
   }
   
+  /* define the parent */
+  EGXP_EXTENSION (ext)->parent = e;
+  /* add the extension to the hash */
   ecore_hash_set (e->extensions, (int*)id, ext);
 }
 

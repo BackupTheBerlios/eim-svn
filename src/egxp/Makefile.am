@@ -16,7 +16,8 @@ pkgincludeinput_HEADERS= \
 	egxp_node.h          \
 	egxp_opcode.h        \
 	egxp.h               \
-	egxp_protocol_handler.h
+	egxp_protocol_handler.h \
+	egxp_connection.h
 
 
 libegxp_la_SOURCES = \
@@ -25,7 +26,8 @@ libegxp_la_SOURCES = \
 	egxp_node.c         \
 	egxp_opcode.c       \
 	egxp.c              \
-	egxp_protocol_handler.c
+	egxp_protocol_handler.c \
+	egxp_connection.c
 
 libegxp_la_LIBADD = $(ecore_libs) $(IDN_LIBS) $(EXPAT_LIB)
 libegxp_la_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS) $(EXPAT_INCLUDE)

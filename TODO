@@ -1,5 +1,6 @@
 HIGH URGENCY
-- implement the receive callback to give data to the XML Parser
+- implement the xmpp_message_stream to give a connection example
+- implement the xmpp_callback_stream_begin_cb to show how handle received data
 
 LOW URGENCY
 - Should change the egxp_message to handle integer tag instead of char * tag.

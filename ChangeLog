@@ -1,6 +1,15 @@
 2005-02-13(jol):
+	- Add connection control inside egxp. So it's now possible to connect/disconnect 
+	  and get/send message to a server.
+	- Add a first support to jid (malloc and free :)
+	- Add a beginning to send xmpp message.
+	- Update the xmpp test example. You can only connect to a server. 
+	  But the test code allow you to understand how the future will be to add 
+	  jabber extension protocol.
+	- Minor fix and improvement.
 	- begin the xmpp part.
 	- add the extension concept inside the Egxp structure
+	
 2005-02-12(jol):
 	- factorize some code inside egxp_protocol_handler.
 	- finished the protocol handler xml part.
