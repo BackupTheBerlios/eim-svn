@@ -1,3 +1,6 @@
+2005-02-13(jol):
+	- begin the xmpp part.
+	- add the extension concept inside the Egxp structure
 2005-02-12(jol):
 	- factorize some code inside egxp_protocol_handler.
 	- finished the protocol handler xml part.

@@ -75,5 +75,6 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 src/egxp/Makefile
+src/xmpp/Makefile
 doc/Makefile
 ])

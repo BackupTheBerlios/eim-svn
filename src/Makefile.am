@@ -1,1 +1,2 @@
-SUBDIRS=egxp
+SUBDIRS=egxp xmpp
+

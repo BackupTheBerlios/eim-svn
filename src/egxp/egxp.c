@@ -34,14 +34,16 @@ Egxp * egxp_new () {
   /* the root of the protocol */
   tmp->root = egxp_node_new (egxp_opcode_get_id (tmp->opcodes, 
 						      "__ROOT__"));
-  
-  
+    
   /* initialize the user data */
   tmp->user_data = NULL;
   
   /* define the protocol handler */
   tmp->protocol_handler = egxp_protocol_handler_new (tmp);
-  
+
+  /* initialzie extension */
+  tmp->extensions = NULL;
+
   return tmp;
 }
 
@@ -57,6 +59,44 @@ void egxp_free (Egxp * e) {
   if (e->root) egxp_node_free(e->root);
   /* free protocol handler */
   if (e->protocol_handler) egxp_protocol_handler_free (e->protocol_handler);
+  /* free extension */
+  if (e->extensions) ecore_hash_destroy (e->extensions);
   
   free (e);
+}
+
+
+void egxp_extension_free (void * e) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_extension_free\n");
+#endif
+  assert (e);
+  
+  Egxp_Extension * ext = EGXP_EXTENSION(e);
+  ext->destroy (e);
+}
+
+void egxp_extension_register (Egxp * e, int id, void * ext) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_extension_register\n");
+#endif
+  assert (e && ext);
+
+  if (e->extensions == NULL) {
+    e->extensions = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
+    ecore_hash_set_free_value (e->extensions, egxp_extension_free);
+  }
+  
+  ecore_hash_set (e->extensions, (int*)id, ext);
+}
+
+
+void * egxp_extension_get (Egxp *e, int id) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_extension_get\n");
+#endif
+  assert (e && id);
+  assert (e->extensions);
+
+  return ecore_hash_get (e->extensions, (int*)id);
 }

@@ -22,6 +22,8 @@
 #ifndef egxp_header_h_
 #define egxp_header_h_
 
+#include <Ecore_Data.h>
+
 #include "egxp_node_struct.h"
 #include "egxp_node.h"
 #include "egxp_opcode.h"
@@ -42,8 +44,18 @@ struct _Egxp {
   /* the protocol handler */
   Egxp_ProtocolHandler * protocol_handler;
 
+  /* contains data */
+  Ecore_Hash * extensions;
+
   /* specific user data */
   void * user_data;
+};
+
+
+typedef struct _Egxp_Extension Egxp_Extension;
+#define EGXP_EXTENSION(o) ((Egxp_Extension*)o)
+struct _Egxp_Extension {
+  Ecore_Free_Cb destroy;
 };
 
 
@@ -59,5 +71,18 @@ Egxp * egxp_new ();
  * Free the egxp structure
  */
 void egxp_free (Egxp * e);
+
+
+/**
+ * Register an extension. It allows to store data, so when you define 
+ * other extension you can store you're structure inside
+ */
+void egxp_extension_register (Egxp * e, int id, void * ext);
+
+
+/**
+ * @return the extension
+ */
+void * egxp_extension_get (Egxp *e, int id);
 
 #endif

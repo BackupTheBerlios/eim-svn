@@ -5,7 +5,7 @@ test_SOURCES = \
 test_LDADD = libegxp.la
 test_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS)
 
-lib_LTLIBRARIES = libegxp.la
+noinst_LTLIBRARIES = libegxp.la
 
 pkgincludeinputdir = $(pkgincludedir)/egxp
 
