@@ -12,8 +12,17 @@ int timer_cb (void * user_data) {
   return 1;
 }
 
-int main (int argc, char ** argv) {
-  
+
+void test_jid () {
+  int i;
+  for (i = 0; i < 2000; i++) {
+    Xmpp_JID * tmp = xmpp_jid_new_from_bare ("jol@amessage.de/essai");
+    xmpp_jid_free (tmp);
+  }
+}
+
+
+int test_xmpp (int argc, char ** argv) {
   /**
    * usage
    */
@@ -64,6 +73,11 @@ int main (int argc, char ** argv) {
   /* shutdown */
   ecore_con_shutdown ();
   ecore_shutdown();
+}
+
+int main (int argc, char ** argv) {
+
+  //test_jid ();
   
-  return 0;
+  return test_xmpp (argc, argv);
 }

@@ -78,6 +78,7 @@ int test_all (int argc, char ** argv) {
   /* initialize protocol */
   Xmpp * xm = xmpp_register (eg);
   XmppIM * xmppim = xmpp_im_register (eg);
+  
 
   /* display the egxp structure */
   egxp_display(eg);
@@ -124,7 +125,7 @@ int test_all (int argc, char ** argv) {
 int main (int argc, char ** argv) {
 
   /* test roster */
-  test_roster ();
+  //test_roster ();
 
   return test_all (argc, argv);
 }

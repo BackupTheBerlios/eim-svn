@@ -47,7 +47,7 @@ Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource);
  * @param bar: the bar representation
  * @return the newly created jid
  */ 
-Xmpp_JID * xmpp_jid_new_from_bar (char * jidbar);
+Xmpp_JID * xmpp_jid_new_from_bare (char * jidbar);
 
 
 /**

@@ -20,6 +20,7 @@
 */
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "xmpp/xmpp_opcode.h"
 #include "xmpp/xmpp_jid.h"
@@ -147,6 +148,8 @@ XmppIM_Contact * xmpp_im_contact_create_from_item_message (XmppIM_Roster * r, Eg
     char * grp_name = egxp_message_get_data (msg_item);
 
     /* add the contact to the group */
+    printf("DEBUG ---> xmpp_im_contact_create_from_item_message GRP NAME: %s\n", 
+	   grp_name);
     xmpp_im_roster_add_contact_to_group (r, contact, grp_name);
     
     /* free the group name */

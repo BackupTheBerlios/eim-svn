@@ -1,3 +1,7 @@
+2005-03-30(jol):
+	- fix a bug in the xmpp_jid code,
+	- the bug hunting progress ...
+	
 2005-03-22(jol):
 	- Now all contacts and group are stored in memory,
 	- Minor add inside xmpp_jid.

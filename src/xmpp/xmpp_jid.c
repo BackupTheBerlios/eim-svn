@@ -35,10 +35,10 @@ Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource) {
   
   Xmpp_JID * tmp = XMPP_JID(malloc (sizeof(Xmpp_JID)));
   
-  tmp->user = strdup (user);
-  tmp->host = strdup (host);
+  tmp->user = user?strdup (user):NULL;
+  tmp->host = host?strdup (host):NULL;
   tmp->resource = resource?strdup (resource):NULL;
-
+  
   return tmp;
 }
 
@@ -69,20 +69,26 @@ Xmpp_JID * xmpp_jid_new_from_bare (char * jidbar) {
 
   /* check if there is a name */
   if (at != NULL) {
-    tmp->user = strndup ((const char*)jidbar, (size_t) (((int)at) - ((int)jidbar)) / sizeof (char));
+    int t = at - jidbar;
+    tmp->user = (char*) malloc ( (t+1) * sizeof(char));
+    tmp->user = strncpy (tmp->user, jidbar, t);
+    tmp->user[t] = '\0';
     at = (at+1);
   } else {
-    tmp->user = strdup("");
+    tmp->user = NULL; //strdup("");
     at = jidbar;
   }
 
   /* set the host */
   if (slash == NULL) {
     tmp->host = strdup ((char*) at);
-    tmp->resource = strdup ("");
+    tmp->resource = NULL;
   } else {
     /* set the host */
-    tmp->host = strndup ((const char*) at, (size_t) (((int)slash) - ((int)at)) / sizeof(char));
+    int t = (size_t) (((int)slash) - ((int)at)) / sizeof(char);
+    tmp->host = (char*) malloc ((t+1) * sizeof (char));
+    tmp->host = strncpy (tmp->host, at, t);
+    tmp->host[t] = '\0';
     tmp->resource = strdup((const char*) (slash + 1));
   }
 
@@ -99,14 +105,17 @@ char * xmpp_jid_get_bar (Xmpp_JID * jid) {
   unsigned int u = jid->user?strlen (jid->user):0;
   unsigned int h = jid->host?strlen (jid->host):0;
   
-  /* initialize the structre */
-  char * tmp = (char*) malloc ( (u + h + 2) * sizeof (char));
-  tmp = strncpy (tmp, jid->user, u);
-  tmp[u] = '@';
-  strncpy (tmp + ((u+1) * sizeof (char)), jid->host, h);
-  tmp [u + h + 1] = '\0';
+  if (jid->user) {
+    /* allocate user + '@' + host + '\0' */
+    char * tmp = (char*) malloc ( (u + h + 2) * sizeof (char));
+    tmp = strncpy (tmp, jid->user, u);
+    tmp[u] = '@';
+    strncpy (tmp + ((u+1) * sizeof (char)), jid->host, h);
+    tmp [u + h + 1] = '\0';
+    return tmp;
+  }
   
-  return tmp;
+  return strdup (jid->host);
 }
 
 
@@ -117,20 +126,34 @@ char * xmpp_jid_get_full (Xmpp_JID * jid) {
   assert (jid);
   
   /* compute the size user@host/resource\0 */
-  unsigned int u = jid->user?strlen (jid->user):0;
-  unsigned int h = jid->host?strlen (jid->host):0;
+  // unsigned int u = jid->user?strlen (jid->user):0;
+  // unsigned int h = jid->host?strlen (jid->host):0;
   unsigned int r = jid->resource?strlen (jid->resource):0;
   
   /* initialize the structre */
-  char * tmp = (char*) malloc ( (u + h + r + 3) * sizeof (char));
+  /*  char * tmp = (char*) malloc ( (u + h + r + 3) * sizeof (char));
   tmp = strncpy (tmp, jid->user, u);
   tmp[u] = '@';
   strncpy (tmp + ((u+1) * sizeof (char)), jid->host, h);
   tmp[u + 1 + h] = '/';
   strncpy (tmp + ((u + 2 + h) * sizeof (char)), jid->resource, r);
   tmp [u + h + r + 2] = '\0';
+  */
   
-  return tmp;
+  
+  if (r) {
+    char * tmp =  xmpp_jid_get_bar (jid);
+    int idx = strlen (tmp);
+    char * tmp2 = (char*) malloc ( (idx + r + 1) * sizeof (char));
+    strcpy (tmp2, tmp);
+    strcpy (tmp2 + idx, jid->resource);
+    tmp2[idx + r ] = '\0';
+    free (tmp);
+    return tmp2;
+  }
+
+  
+  return xmpp_jid_get_bar (jid);
 }
 
 
@@ -139,8 +162,5 @@ unsigned int xmpp_jid_has_user (Xmpp_JID * jid) {
   printf("TRACE: xmpp_jid_has_user\n");
 #endif 
   assert (jid);
-  if (jid->user) {
-  	return strlen (jid->user) != 0;
-  }
-  return 0;
+  return jid->user != NULL;
 }
