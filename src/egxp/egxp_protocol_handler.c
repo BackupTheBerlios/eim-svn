@@ -169,8 +169,6 @@ void egxp_protocol_handler_end_element(void *userData, const char *name) {
 #endif   
     ph->current_msg = ph->current_msg->parent;
   }
-  
-  assert (ph->current_msg);
 }
 
 

@@ -1,3 +1,10 @@
+2005-02-19(jol):
+	- Fix memory leaks
+	- rename egxp_opcode_display to egxp_opcode_free
+	- fix the egxp_opcode_add, when you try to add an existing element it is not added
+	  and it return the good id.
+	- in the xmpp/test place the egxp_free before the ecore_shutdown.
+	
 2005-02-18(jol):
 	- Try to fix some memory leaks
 	

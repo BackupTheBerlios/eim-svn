@@ -42,7 +42,6 @@ void xmpp_opcode_init (Egxp * eg) {
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS);
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS_STREAM);
   
-  egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_XMLNS);
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_XMLNS_STREAM);
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_VERSION);
   

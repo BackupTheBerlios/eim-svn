@@ -23,7 +23,8 @@ int main (int argc, char ** argv) {
   }
 
   /* initialize ecore connection */
-  ecore_con_init();
+  ecore_init();
+  ecore_con_init ();
 
   /* create Egxp  */
   Egxp * eg = egxp_new ();
@@ -32,7 +33,7 @@ int main (int argc, char ** argv) {
   Xmpp * xm = xmpp_register (eg);
   
   /* after 3 second we quit the ecore loop */
-  ecore_timer_add (5, timer_cb, NULL);
+  Ecore_Timer * timer = ecore_timer_add (5, timer_cb, NULL);
   printf("Quit automaticly (after 5 seconds)\n");
   
   /* define the connection */
@@ -46,18 +47,18 @@ int main (int argc, char ** argv) {
   /* define the jid */
   xm->jid = xmpp_jid_new (argv[1], argv[2], "eim");
   
-  egxp_opcode_display (eg->opcodes);
-
   /* now we can send a message to the server */
   xmpp_message_stream (xm);
 
   /* ecore loop */
   ecore_main_loop_begin();
-  /* shutdown */
-  ecore_con_shutdown();
   
   /* free Egxp */
   egxp_free (eg);
+  
+  /* shutdown */
+  ecore_con_shutdown ();
+  ecore_shutdown();
   
   return 0;
 }

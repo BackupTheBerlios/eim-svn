@@ -65,11 +65,20 @@ int egxp_opcode_add (Egxp_Opcode * op, const char * name) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_opcode_add\n");
 #endif
-
+  
   assert (op && name);
   
+  int * id = NULL;
+  /* check if the name already exist */
+  if ( (id = ecore_hash_get (op->string_id, (char*) name)) != NULL) {
+#ifdef EGXP_DEBUG
+    printf("TRACE: egxp_opcode_add -> %s already exists\n", name);
+#endif 
+    return *id;
+  }
+
   /* allocate the memory for the id */
-  int * id = (int*) malloc (sizeof (int));
+  id = (int*) malloc (sizeof (int));
   *id = op->id++;
   
 #ifdef EGXP_DEBUG

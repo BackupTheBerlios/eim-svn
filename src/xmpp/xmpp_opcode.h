@@ -32,7 +32,6 @@
 
 #define XMPP_TAG_USERNAME       "username"
 
-#define XMPP_ATT_XMLNS          "xmlns"
 #define XMPP_ATT_XMLNS_STREAM   "xmlns:stream"
 
 #define XMPP_VALUE_STREAM_XMLNS          "jabber:client"
