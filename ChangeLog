@@ -1,3 +1,5 @@
 2005-02-06(jol):
 	- fix a memleak from egxp_free
 	- add Egxp_ConditionalNode
+	- add TODO file
+	
