@@ -27,6 +27,13 @@ Xmpp_Auth * xmpp_auth_new ();
 
 
 /**
+ * Initialize the structure with the password
+ * @return the newly allocated structure
+ */
+Xmpp_Auth * xmpp_auth_new_with_passwd (char * pwd);
+
+
+/**
  * Free the authentification structure
  * - free the password
  * - free the stream id

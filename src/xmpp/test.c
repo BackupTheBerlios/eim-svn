@@ -47,6 +47,9 @@ int main (int argc, char ** argv) {
   /* define the jid */
   xm->jid = xmpp_jid_new (argv[1], argv[2], "eim");
   
+  /* define the password */
+  xm->auth = xmpp_auth_new_with_passwd (argv[4]);
+  
   /* now we can send a message to the server */
   xmpp_message_stream (xm);
 

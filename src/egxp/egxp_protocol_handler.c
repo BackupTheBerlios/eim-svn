@@ -107,9 +107,12 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
   
   /* attach the message */
   if (ph->current_msg == NULL) {
+    /* set the message as root message */
     ph->current_msg = message;
   } else {
+    /* add the new message to the root node */
     egxp_message_add_child (ph->current_msg, message);
+    /* the new message become the root */
     ph->current_msg = message;
   }
   
@@ -157,15 +160,22 @@ void egxp_protocol_handler_end_element(void *userData, const char *name) {
     /* go to the parent message and destroy the current message */
     Egxp_Message * old = ph->current_msg;
     ph->current_msg = old->parent;
-    if (ph->current_msg) egxp_message_remove_child (ph->current_msg, old);
-    egxp_message_free (old);
     
+    /* remove the old message */
+    egxp_message_free (old);
   } else {
 
 #ifdef EGXP_DEBUG
     printf("TRACE: egxp_protocol_handler_end_element -> NOT matches opcode : %s\n", name);
 #endif   
-    ph->current_msg = ph->current_msg->parent;
+    
+    /* if there is no parent we destroy the current message */
+    if (ph->current_msg->parent == NULL) {
+      egxp_message_free (ph->current_msg);
+      ph->current_msg = NULL;
+    }
+    /* other wise we continue */
+    else ph->current_msg = ph->current_msg->parent;
   }
 }
 
@@ -179,7 +189,7 @@ void egxp_protocol_handler_char_data (void *userData, const XML_Char *s, int len
   Egxp * eg = EGXP (userData);
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   
-  assert (eg && ph);
+  assert (eg && ph && ph->current_msg);
   
   /* append data to the message */
   egxp_message_append_data ( ph->current_msg, (char*) s, len);
@@ -193,7 +203,7 @@ char egxp_protocol_handler_condition_equals (Ecore_List * conditions, Egxp_Messa
   printf("TRACE: egxp_protocol_handler_condition_equals\n");
 #endif
   assert (message && opcode);
-
+  
   /* if the node has no condition we can conclude that they are equals */
   if (conditions == NULL) return 1;
   
@@ -277,6 +287,8 @@ int egxp_protocol_handler_receive_server_cb (void *data, int type, Ecore_Con_Eve
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   XML_Parser parser =  ph->parser;
   
+  assert (eg && ph && parser);
+
   char * tmp_buf = (char*) malloc ((ev->size +1) * sizeof (char));
   tmp_buf[ev->size] = '\0';
   strncpy (tmp_buf, (char*)ev->data, ev->size); 

@@ -35,7 +35,7 @@ Egxp * egxp_new () {
   
   /* the root of the protocol */
   tmp->root = egxp_node_new (egxp_opcode_get_id (tmp->opcodes, 
-						      "__ROOT__"));
+						 "__ROOT__"));
     
   /* initialize the user data */
   tmp->user_data = NULL;

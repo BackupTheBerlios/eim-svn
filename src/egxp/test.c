@@ -106,6 +106,16 @@ int main (int argc, char ** argv) {
   
   egxp_message_add_child (mesg1, mesg2);
 
+
+  egxp_message_append_data (mesg1, "terglkdfjgldsjglsdfjgldsfgsldkj",
+			    strlen ("terglkdfjgldsjglsdfjgldsfgsldkj"));
+  egxp_message_append_data (mesg1, "terglkdfjglaaaaaaaaaaadsjglsdfjgldsfgsldk",
+			    strlen("terglkdfjglaaaaaaaaaaadsjglsdfjgldsfgsldk")
+			    );
+  egxp_message_append_data (mesg1, "terglkdfjgldsjgl...sdfjgldsfgsldkj",
+			    strlen  ("terglkdfjgldsjgl...sdfjgldsfgsldkj"));
+  
+
   /* free the message */
   // egxp_message_free (mesg1);
   

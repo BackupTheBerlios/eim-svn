@@ -1,3 +1,9 @@
+2005-02-24(jol):
+	- Fix the bug ! The message was not correctly remove from the child list
+	of a message. The reason is that i didn't use correctly the ecore_list functions.
+	- Add some helpful functions.
+	- Now we are authentifiate near the server.
+	
 2005-02-20(jol):
 	- add egxp_message_root allowing to get the root message of a message.
 	- try to fix memory leaks and a dirty segfault.

@@ -98,6 +98,5 @@ void xmpp_opcode_init (Egxp * eg) {
   egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_ID),
 						   egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_IQ_AUTH_1)));
   /* attach callback */
-  // egxp_node_set_cb (iq, NULL, xmpp_auth_auth_1_cb);
-  
+  egxp_node_set_cb (iq, NULL, xmpp_auth_auth_1_cb);
 }

@@ -71,13 +71,13 @@ void egxp_message_free (Egxp_Message * m) {
   
   /* if attached to a parent, we remove the dependancies */
   if (m->parent) {
-    // egxp_message_remove_child (m->parent, m);
+    egxp_message_remove_child (m->parent, m);
   }
   m->parent = NULL;
 
  IF_FREE (m->data);
-  FREE (m);
-  
+ FREE (m);
+ 
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_message_free -> end: %s\n", debug);
   FREE (debug);
@@ -168,11 +168,15 @@ void egxp_message_remove_child (Egxp_Message *m, Egxp_Message * ma) {
 
   ecore_list_goto_first(m->childs);
   Egxp_Message * list_item;
-  while((list_item = EGXP_MESSAGE(ecore_list_next(m->childs))) != NULL) {
+  while((list_item = EGXP_MESSAGE(ecore_list_current(m->childs))) != NULL) {
     if (ma == list_item) {
-      ecore_list_remove (m->childs);
+      if (! ecore_list_remove (m->childs)) {
+	printf("Remove Failed !!!!!!!!!!!!!!!!!!!! %s %s\n", m->tagname, list_item->tagname);
+	assert (0);
+      }
       return;
-    } 
+    }
+    ecore_list_next (m->childs);
   }
 }
 
@@ -230,7 +234,7 @@ char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
 
   // "<tagname " + 3 -> \0
   len = strlen (m->tagname) + 3;
-  buf = (char*) calloc (len, sizeof (char));
+  buf = (char*) malloc (len * sizeof (char));
   buf = memset (buf, 0, len); 
   buf = strncat (buf, "<", 1);
   buf = strncat (buf, m->tagname, strlen (m->tagname));

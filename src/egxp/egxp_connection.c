@@ -87,7 +87,7 @@ void egxp_connection_send_message (Egxp_Connection *c, Egxp_Message * msg, unsig
 
   // to xml
   char * buf = egxp_message_to_xml (msg, end_tag);
-  printf("log send: %s\nsize: %d\n", buf, strlen (buf));
+  printf("LOG egxp_connection_send_message: %s\nsize: %d\n", buf, strlen (buf));
   
   // free message
   egxp_message_free (msg);

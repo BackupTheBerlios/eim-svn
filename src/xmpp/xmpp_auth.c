@@ -27,6 +27,17 @@ Xmpp_Auth * xmpp_auth_new () {
 }
 
 
+Xmpp_Auth * xmpp_auth_new_with_passwd (char * pwd) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_auth_new_with_passwd\n");
+#endif
+  Xmpp_Auth * tmp = xmpp_auth_new ();
+  /* load password */
+  tmp->password = strdup (pwd);
+  
+  return tmp;
+}
+
 void xmpp_auth_free (Xmpp_Auth * a) {
 #ifdef XMPP_DEBUG
   printf("TRACE: xmpp_auth_free\n");
@@ -141,9 +152,8 @@ void xmpp_auth_auth_1_cb (Egxp_Message * msg, void * eg) {
     printf("DEBUG: xmpp_auth_auth_1_cb -> It seems that you haven't define resource\n");
 #endif 
   }
-
+  
   /* now we can try to send the message */
-  // Egxp_Connection * conn = EGXP_EXTENSION(xm)->parent->connection;
-  //egxp_connection_send_message (conn, iq, 1);
-  egxp_message_free (iq);
+  Egxp_Connection * conn = EGXP_EXTENSION(xm)->parent->connection;
+  egxp_connection_send_message (conn, iq, 1);
 }

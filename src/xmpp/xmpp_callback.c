@@ -40,7 +40,7 @@ void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg) {
   
   /* check if there is a authentification object */
   if (xm->auth == NULL) xm->auth = xmpp_auth_new ();
-
+  
   /* try to set the stream id */
   xm->auth->stream_id = egxp_message_get_attribute (msg, XMPP_ATT_ID);
   
