@@ -18,30 +18,43 @@
    along with Eim; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef egxp_childnode_header_h_
-#define egxp_childnode_header_h_
+#ifndef egxp_protocol_handler_header_h_
+#define egxp_protocol_handler_header_h_
 
-#include "egxp_node_struct.h"
+#include <expat.h>
+#include "egxp_message.h"
+
+struct _Egxp;
+
+typedef struct _Egxp_ProtocolHandler Egxp_ProtocolHandler;
+#define EGXP_PROTOCOLHANDLER(o) ((Egxp_ProtocolHandler*)o)
+struct _Egxp_ProtocolHandler {
+  
+  /* the current message */
+  Egxp_Message * current_msg;
+
+  /* the XML Parser */
+  XML_Parser parser;
+};
+
 
 /**
- * Create an initialize a new child node
+ * Allocate the protocol handler structure
+ *  - initialize the XML Parser and set Egxp struct as a user data of
+ *    the xml parser.
+ * @param e: the Egxp structure sets as user data for the xml parser
  */
-Egxp_ChildNode * egxp_child_node_new ();
+Egxp_ProtocolHandler * egxp_protocol_handler_new (struct _Egxp * e);
 
 
 /**
- * Free a child node
+ * Free the protocol handler
+ * @param ph: the protocol handler to be freed.
  */
-void egxp_child_node_free (Egxp_ChildNode * cn);
+void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph);
 
 
-/**
- * Add a node to the child node.
- *  - if the hash map is not allocated we initialize it.
- * @param cn: the child node
- * @param c: the node to add in the hash list
- */
-void egxp_child_node_add_node (Egxp_ChildNode * cn, Egxp_Node * c);
+
 
 
 #endif

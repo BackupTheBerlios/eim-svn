@@ -2,6 +2,9 @@
 	- do not return pointer with egxp_opcode_get_id
 	- add functions to egxp_conditional_node with some helper function
 	- update the test example
+	- add Egxp_ProtocolHandler
+	- configure.ac add depends on expat
+	- add the GPL in each source file
 	
 2005-02-06(jol):
 	- fix a memleak from egxp_free

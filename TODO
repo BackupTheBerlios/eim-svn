@@ -1,2 +1,3 @@
 - Change the Egxp_ChildNode to Egxp_BaseNode
 - Egxp_Node must inherit from Egxp_BaseNode
+- Continue the ProtocolHandler stuff
