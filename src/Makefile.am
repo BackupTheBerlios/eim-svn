@@ -11,8 +11,10 @@ eim_SOURCES = \
 	eim.c
 
 eim_CFLAGS = \
-	$(ecore_cflags) $(IDN_CFLAGS) \
-	-I$(top_srcdir)/src
+	-I$(top_srcdir)/src           \
+	$(ewl_cflags)                 \
+	$(ecore_cflags) $(IDN_CFLAGS)
+
 
 eim_LDADD = \
 	-Legxp/ -legxp        \

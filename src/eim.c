@@ -19,8 +19,11 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include <Ecore.h>
 #include <Ecore_Con.h>
+
+#include <Ewl.h>
 
 #include "gui/gui_main.h"
 
@@ -43,21 +46,61 @@ static int eim_handler_signal_exit (void *data, int ev_type, void *ev) {
 
 
 int main (int argc, char **argv) {
+  int          c = 0;
+  char         theme_file[PATH_MAX];
+  int          got_theme_file = FALSE;
+  struct stat  statbuf;
+  
+  /* parse the command line */
+  while ( (c = getopt (argc, argv, "ht")) != -1) {
+    
+    switch (c) {
+    case 'h':
+      printf ("Usage: %s [OPTION] ...\n\n", argv[0]);
+      printf ("  -h        \t display this help and exit\n");
+      printf ("  -t THEME  \t specify an edje theme file (.eet)\n");
+      
+      exit (-1);
+      break;
+    case 't':
+      got_theme_file = TRUE;
+      snprintf (theme_file, PATH_MAX, "%s", (char *) argv[optind]);
+      break;
+    };
+  }
+  
+  
+  /* check if there is a valid theme file */
+  if (got_theme_file) {
+    stat (theme_file, &statbuf);
+    if (!S_ISREG(statbuf.st_mode)) {
+      fprintf (stderr, "error: themefile '%s' does not exist!\n", 
+	       theme_file);
+      exit (-1);
+    }
+  }
+  
   
   /* initialize the core */
   ecore_init ();
+  if (!ewl_init(&argc, argv)) {
+    printf("Unable to init ewl\n");
+    return -1;
+  }
+
   ecore_event_handler_add (ECORE_EVENT_SIGNAL_EXIT, eim_handler_signal_exit, NULL);
   if (!ecore_con_init ()) return -1;
   
   ecore_app_args_set (argc, (const char **) argv);
 
-  if (gui_main_init ("eim")) return -1;
+  if (gui_main_init2 ("eim", theme_file)) return -1;
   
   /* process the main loop */
   ecore_main_loop_begin ();
 
 
   /* shutdown all ecore service */
+  ewl_shutdown ();
   ecore_shutdown ();
   
   return 0;

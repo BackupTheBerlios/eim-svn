@@ -84,6 +84,16 @@ evas_cflags=`evas-config --cflags`
 AC_SUBST(evas_libs)
 AC_SUBST(evas_cflags)
 
+dnl Check for ewl
+AC_PATH_GENERIC(ewl, 0.0.4, [
+  AC_SUBST(ewl_libs)
+	AC_SUBST(ewl_cflags) ],
+	AC_MSG_ERROR(Cannot find ewl: Is ewl-config in path?))
+ewl_libs=`ewl-config --libs`
+ewl_cflags=`ewl-config --cflags`
+AC_SUBST(ewl_libs)
+AC_SUBST(ewl_cflags)
+
 dnl Check for expat
 EXPAT_INCLUDE=""
 EXPAT_LIB="-lexpat"

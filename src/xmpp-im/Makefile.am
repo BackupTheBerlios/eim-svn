@@ -21,6 +21,7 @@ pkgincludeinput_HEADERS= \
 
 libxmppim_la_SOURCES = \
 	xmpp_im_contact.c  \
-	xmpp_im_roster.c
+	xmpp_im_roster.c   \
+	xmpp_im.c
 
 libxmppim_la_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS) $(EXPAT_INCLUDE) -I$(top_srcdir)/src

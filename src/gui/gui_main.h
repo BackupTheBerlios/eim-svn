@@ -24,8 +24,11 @@
 
 /**
  * Initialize the GUI
+ * @param winname: The name for the window
+ * @param theme: The theme file.
  * @return 0 on success
  */
-int gui_main_init (char * winname);
+int gui_main_init (char * winname, char * theme);
+int gui_main_init2 (char * winname, char * theme);
 
 #endif

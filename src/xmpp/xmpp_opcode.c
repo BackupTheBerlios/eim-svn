@@ -66,9 +66,20 @@ void xmpp_opcode_init (Egxp * eg) {
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_AUTH_1);
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_AUTH_2);
 
-  // egxp_opcode_add (eg->opcodes, );
   
+  /* define presence tag & value */
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_PRESENCE);
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_PRESENCE_STATUS);
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_PRESENCE_PRIORITY);
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_PRESENCE_SHOW);
   
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_PRESENCE_SHOW_AWAY);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_PRESENCE_SHOW_CHAT);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_PRESENCE_SHOW_DND);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_PRESENCE_SHOW_XA);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_PRESENCE_SHOW_ONLINE);
+  
+
 
   /********************/
   /********************/

@@ -26,6 +26,8 @@
 #include <Esmart/Esmart_Container.h>
 #include <Ecore_Evas.h>
 
+#include <Ewl.h>
+
 #include "gui_main.h"
 
 
@@ -77,7 +79,7 @@ void gui_main_resize_cb(Ecore_Evas *ee) {
 }
 
 
-int gui_main_init (char * winname) {
+int gui_main_init (char * winname, char * theme) {
 
   /* the X Window object */
   Ecore_X_Window  win;
@@ -137,5 +139,103 @@ int gui_main_init (char * winname) {
 				   CONTAINER_FILL_POLICY_FILL);
   
 
+  return 0;
+}
+
+
+
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+void _gui_main_destroy_cb(Ewl_Widget *w, void *event, void *data) {
+    ewl_widget_destroy(w);
+    ewl_main_quit();
+}
+
+
+void item_cb(Ewl_Widget *w, void *event, void *data) {
+  Ewl_Widget * imenubox;
+  Ewl_Widget * item;
+  
+  /*  imenubox = ewl_vbox_new ();
+  ewl_object_fill_policy_set (EWL_OBJECT(imenubox), EWL_FLAG_FILL_FILL);
+  ewl_widget_show (imenubox);
+  */
+  imenubox = ewl_menu_new ("", "Test");
+  
+  
+  item = ewl_menu_item_new ("", "titi");
+  ewl_container_child_append (EWL_CONTAINER (imenubox), item);
+  ewl_widget_show (item);
+
+  // ewl_container_child_append (EWL_CONTAINER (w), imenubox);
+
+  //  ewl_widget_show (EWL_MENU(imenubox)->base.popup);
+
+
+  ewl_menu_configure_cb (imenubox, event, data);
+  ewl_menu_expand_cb (imenubox, event, data);
+  ewl_widget_show (imenubox);
+}
+
+
+int gui_main_init2 (char * winname, char * theme) {
+  Ewl_Widget     *main_win = NULL;
+  Ewl_Widget     *tree = NULL;
+  Ewl_Widget     *box = NULL;
+
+  Ewl_Widget     * item = NULL;
+  Ewl_Widget     * box_item = NULL;
+
+  /* create the main windows */
+  main_win = ewl_window_new();
+  /* define size */
+  ewl_object_size_request(EWL_OBJECT(main_win), 80, 300);
+  ewl_object_fill_policy_set(EWL_OBJECT(main_win), EWL_FLAG_FILL_ALL);
+  /* define title */
+  ewl_window_title_set(EWL_WINDOW(main_win),
+		       "The Enlightenment Instant Messenger");
+  
+  ewl_callback_append(main_win, EWL_CALLBACK_DELETE_WINDOW, _gui_main_destroy_cb, NULL);
+  ewl_window_name_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
+  ewl_window_class_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
+  ewl_widget_show(main_win);
+
+
+  /* create the container */
+  box = ewl_vbox_new();
+  ewl_container_child_append(EWL_CONTAINER(main_win), box);
+  ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL);
+  ewl_widget_show(box);
+  
+  
+  /* create the tree root object */
+  tree = ewl_tree_new (1); 
+  ewl_container_child_append (EWL_CONTAINER(box), tree);
+  ewl_widget_show(tree);
+
+  
+  /* add some test */
+  Ewl_Widget * hbox = ewl_hbox_new (); 
+  ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL);
+  ewl_widget_show (hbox);
+  ewl_callback_append(hbox, EWL_CALLBACK_CLICKED, item_cb, NULL);
+  
+  
+  /* image */
+  Ewl_Widget *img = ewl_image_new("/usr/share/psi/iconsets/roster/default/online.png", NULL);
+  ewl_object_alignment_set(EWL_OBJECT(img), EWL_FLAG_ALIGN_LEFT);
+  ewl_object_fill_policy_set(EWL_OBJECT(img), EWL_FLAG_FILL_HSHRINK);
+  ewl_container_child_append (EWL_CONTAINER (hbox), img);
+  ewl_widget_show(img);
+  
+  /* text */
+  Ewl_Widget * text = ewl_text_new("text");
+  ewl_container_child_append (EWL_CONTAINER (hbox), text);
+  ewl_widget_show(text);
+  
+  ewl_tree_row_add (EWL_TREE(tree), NULL, &hbox);
+  
   return 0;
 }

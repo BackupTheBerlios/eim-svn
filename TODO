@@ -1,8 +1,7 @@
 HIGH URGENCY
-- implement the xmpp_message_stream to give a connection example
-- implement the xmpp_callback_stream_begin_cb to show how handle received data
+- Create the XmppIM structure in order to fill the roster.
+- Fill the roster !
 
 LOW URGENCY
 - Should change the egxp_message to handle integer tag instead of char * tag.
 - Need some improvement in the egxp_message in order to limit the buffer copy ...
-

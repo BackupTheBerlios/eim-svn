@@ -23,8 +23,15 @@
 
 #include <Ecore_Data.h>
 
+#include "egxp/egxp.h"
 #include "xmpp/xmpp_jid.h"
 
+
+/**
+ * This structure defines what is a contact. A contact is associated 
+ * to a jid and a list of group. A contact can be in several groups.
+ * The name field is the pseudo of the contact.
+ */
 typedef struct _XmppIM_Contact XmppIM_Contact;
 #define XMPPIM_CONTACT(o) ((XmppIM_Contact*)o)
 struct _XmppIM_Contact {
@@ -73,5 +80,22 @@ struct _XmppIM_RosterGroup {
   Ecore_List * users;
 };
 
+
+
+/**
+ * This structure contains all variable associated to 
+ * the xmpp-im extension.
+ */
+typedef struct _XmppIM XmppIM;
+#define XMPPIM(o) ((XmppIM*)o)
+struct _XmppIM {
+  /* This variable is really important, it's used to destroy itself */
+  Egxp_Extension extension;
+
+  /* the roster */
+  XmppIM_Roster * roster;
+  
+  
+};
 
 #endif

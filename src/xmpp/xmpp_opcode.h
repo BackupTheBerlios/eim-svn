@@ -62,6 +62,22 @@
 
 
 /**
+ * Define presence opcode.
+ */
+#define XMPP_TAG_PRESENCE               "presence"
+#define XMPP_TAG_PRESENCE_STATUS        "status"
+#define XMPP_TAG_PRESENCE_PRIORITY      "priority"
+#define XMPP_TAG_PRESENCE_SHOW          "show"
+
+#define XMPP_VALUE_PRESENCE_SHOW_AWAY   "away"
+#define XMPP_VALUE_PRESENCE_SHOW_CHAT   "chat"
+#define XMPP_VALUE_PRESENCE_SHOW_DND    "dnd"
+#define XMPP_VALUE_PRESENCE_SHOW_XA     "xa"
+#define XMPP_VALUE_PRESENCE_SHOW_ONLINE "online"
+
+
+
+/**
  * Add the xmpp opcode inside the opcode variable
  * @param opcode: use to store xmpp opcode
  */

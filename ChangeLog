@@ -1,3 +1,12 @@
+2005-03-13(jol):
+	- XmppIM protocole can be now registered/allocated/...
+	
+
+2005-03-06(jol):
+	- Add xmpp_presence file that provides function to send notification message.
+	- Add some opcode support.
+	- Some test around the gui.
+	
 2005-03-03(jol):
 	- Add a begin to the interface (only a transparent background with its container).
 	- Its just a first look at the evas and esmart api.

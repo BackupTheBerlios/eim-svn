@@ -19,7 +19,8 @@ pkgincludeinput_HEADERS= \
 	xmpp_jid.h       \
 	xmpp_message.h   \
 	xmpp_auth.h      \
-	sha1.h
+	sha1.h           \
+	xmpp_presence.h
 
 libxmpp_la_SOURCES = \
 	xmpp_opcode.c    \
@@ -28,6 +29,7 @@ libxmpp_la_SOURCES = \
 	xmpp_jid.c       \
 	xmpp_message.c   \
 	xmpp_auth.c      \
-	sha1.c
+	sha1.c           \
+	xmpp_presence.c
 
 libxmpp_la_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS) $(EXPAT_INCLUDE) -I$(top_srcdir)/src
