@@ -110,7 +110,6 @@ char * egxp_message_get_attribute (Egxp_Message *m, char * key) {
   ecore_list_goto_first(m->attributes);
   Egxp_MessageAttribute * list_item;
   while((list_item = (Egxp_MessageAttribute*)ecore_list_next(m->attributes)) != NULL) {
-    printf("DEBUG GET ATTRIBUTE Key: %s -- %s\n", key, list_item->key);
     if (strcmp (key, list_item->key) == 0)
       return strdup (list_item->value);
   }
@@ -182,15 +181,12 @@ char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
   buf = strncat (buf, m->tagname, strlen (m->tagname));
   buf = strncat (buf, " ", 1);
   buf_len = len;
-
-  // process attribute
-  printf("DEBUG XML: %s\n", m->tagname);
-
+  
   ecore_list_goto_first(m->attributes);
   Egxp_MessageAttribute * list_item;
   while((list_item = (Egxp_MessageAttribute*)ecore_list_next(m->attributes)) != NULL) {
     // "key=value " +4 (don't forget "")
-    printf("DEBUG XML ATTRIBUTES: %s=%s\n",list_item->key, list_item->value);
+    // printf("DEBUG XML ATTRIBUTES: %s=%s\n",list_item->key, list_item->value);
     buf_len += strlen (list_item->key) + strlen (list_item->value) + 4;
     buf = (char*) realloc (buf, buf_len);
     // copy the key

@@ -19,6 +19,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <assert.h>
+#include <stdio.h>
 #include "egxp.h"
 #include "egxp_protocol_handler.h"
 
@@ -119,9 +120,7 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
   /* try to get the Egxp_Node correspond to the tag id and parameter */
   node = egxp_protocol_handler_get_node (ph->protocol_stack, message, eg->opcodes);
   
-  if (node == NULL) {
-    /* do nothing */
-  } else {
+  if (node != NULL) {
     /* update the hierarchy */
     ph->protocol_stack = node;
     
@@ -136,15 +135,92 @@ void egxp_protocol_handler_end_element(void *userData, const char *name) {
 #endif
   assert (userData && name);
 
+  Egxp * eg = EGXP (userData);
+  Egxp_ProtocolHandler * ph = eg->protocol_handler;
+  
+  assert (eg && ph);
+  
+  /* check if the current message is equal to the current protocol stack node */
+  if (egxp_protocol_handler_equals (ph->protocol_stack, ph->current_msg, eg->opcodes)) {
+    /* if equals we can call the callback associated to the end and update the protocol_stack */
+    if (ph->protocol_stack->end_cb != NULL) ph->protocol_stack->end_cb (ph->current_msg, eg);
+    
+    /* goto the parent node */
+    ph->protocol_stack = ph->protocol_stack->parent;
+  
+    /* go to the parent message and destroy the current message */
+    Egxp_Message * old = ph->current_msg;
+    ph->current_msg = old->parent;
+    egxp_message_free (old);
+  } else {
+    ph->current_msg = ph->current_msg->parent;
+  }
 }
+
 
 void egxp_protocol_handler_char_data (void *userData, const XML_Char *s, int len) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_protocol_handler_char_data\n");
 #endif
-  assert (userData);
+  assert (userData && len >= 0);
+  /* cast the egxp variable */
+  Egxp * eg = EGXP (userData);
+  Egxp_ProtocolHandler * ph = eg->protocol_handler;
   
+  assert (eg && ph);
   
+  /* append data to the message */
+  egxp_message_append_data ( ph->current_msg, (char*) s, len);
+}
+
+
+
+
+char egxp_protocol_handler_condition_equals (Ecore_List * conditions, Egxp_Message * message, Egxp_Opcode * opcode) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_protocol_handler_condition_equals\n");
+#endif
+  assert (message && opcode);
+
+  /* if the node has no condition we can conclude that they are equals */
+  if (conditions == NULL) return 1;
+  
+  /* compare the condition list */
+  Egxp_Condition * cond = NULL;
+  ecore_list_goto_first (conditions);
+  /* browse all condition of the node */
+  while ( (cond = ecore_list_next (conditions)) != NULL) {
+    char * attr_val = egxp_message_get_attribute (message, (char*)egxp_opcode_get_string (opcode, cond->key));
+    /* if we have not found a condition */
+    if (attr_val == NULL) {
+      return 0;
+    }
+    /* check now if the value is the correct value */
+    if( cond->value == egxp_opcode_get_id (opcode, attr_val)) {
+      FREE (attr_val);
+      continue;
+    } else {
+      FREE (attr_val);
+      return 0;
+    }
+  }
+  return 1;
+}
+
+
+char egxp_protocol_handler_equals (Egxp_Node * node, Egxp_Message * message, Egxp_Opcode * opcode) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_protocol_handler_equals\n");
+#endif
+  assert (node && message && opcode);
+
+  /* check if the tag are equals */
+  if (node->tag != egxp_opcode_get_id (opcode, message->tagname)) {
+    return 0;
+  }
+ 
+  /* return true if the conditions are equals */
+  return egxp_protocol_handler_condition_equals (node->conditions, message, opcode);
 }
 
 
@@ -154,7 +230,7 @@ Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, Egxp_Message * mes
   printf("TRACE: egxp_protocol_handler_get_node\n");
 #endif
   
-  assert (node && message);
+  assert (node && message && opcode);
   Egxp_Node * ntmp = NULL;
   if (node->childs == NULL) return NULL;
   
@@ -167,37 +243,36 @@ Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, Egxp_Message * mes
   ecore_dlist_goto_first(ltmp);
   while ( (ntmp = ecore_dlist_next(ltmp)) != NULL) {
     /* check if all conditions of the ntmp is inside the message */
-    if (ntmp->conditions == NULL) {
+    if (egxp_protocol_handler_condition_equals (ntmp->conditions, message, opcode)) {
       return ntmp;
-    }else {
-      Egxp_Condition * cond = NULL;
-      char condition_ok = 1;
-      ecore_list_goto_first (ntmp->conditions);
-      /* browse all condition of the node */
-      while ( (cond = ecore_list_next (ntmp->conditions)) != NULL) {
-        char * attr_val = egxp_message_get_attribute (message, (char*)egxp_opcode_get_string (opcode, cond->key));
-        /* if we have not found a condition */
-        if (attr_val == NULL) {
-          condition_ok = 0;
-          break;
-        }
-        
-        /* check now if the value is the correct value */
-        if( cond->value == egxp_opcode_get_id (opcode, attr_val)) {
-          FREE (attr_val);
-          continue;
-        } else {
-          FREE (attr_val);
-          condition_ok = 0;
-          break;
-        }
-      } 
-
-      /* check if the node is ok */
-      if (condition_ok) return ntmp;
     }
   }
   
   /* not found */
   return NULL;
+}
+
+
+
+int egxp_protocol_handler_receive_server_cb (void *data, int type, Ecore_Con_Event_Server_Data *ev) {
+#ifdef EJAB_DEBUG
+  printf("TRACE: egxp_protocol_handler_receive_server_cb\n");
+#endif
+  
+  assert (data != NULL);
+  
+  Egxp * eg =  EGXP (data);
+  Egxp_ProtocolHandler * ph = eg->protocol_handler;
+  XML_Parser parser =  ph->parser;
+  
+  printf("Got server data %X [%d] (%s)\n", ev->server, ev->size, (char *)ev->data);
+  
+  if (XML_Parse(parser, (char*) ev->data, ev->size, 0) == XML_STATUS_ERROR) {
+    fprintf(stderr, "%s at line %d\n",
+	    XML_ErrorString(XML_GetErrorCode(parser)),
+	    XML_GetCurrentLineNumber(parser));
+    return 1;
+  }
+  
+  return 1;
 }

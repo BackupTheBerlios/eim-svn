@@ -1,7 +1,7 @@
 HIGH URGENCY
-- implement egxp_protocol_handler_end_element
-- implement egxp_protocol_handler_char_data
 - implement the receive callback to give data to the XML Parser
 
 LOW URGENCY
 - Should change the egxp_message to handle integer tag instead of char * tag.
+- Need some improvement in the egxp_message in order to limit the buffer copy ...
+

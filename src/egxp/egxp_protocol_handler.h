@@ -22,6 +22,7 @@
 #define egxp_protocol_handler_header_h_
 
 #include <expat.h>
+#include <Ecore_Con.h>
 
 #include "egxp_message.h"
 #include "egxp_node_struct.h"
@@ -70,5 +71,44 @@ void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph);
 Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, 
                                             Egxp_Message * message,
                                             Egxp_Opcode * opcode);
+
+
+
+/**
+ * This method check if all elements of the conditions list are present 
+ * in the message attributes. If the conditions list is null, we conclude that
+ * the conditions list is equals to the message attributes.
+ * @param conditions: a list of Egxp_Condition object
+ * @param message: The message use to check the condition list
+ * @param opcode: The list of opcode defined.
+ * @return 1 is the condition list is equals, otherwise return 0.
+ */
+char egxp_protocol_handler_condition_equals (Ecore_List * conditions, 
+					     Egxp_Message * message, 
+					     Egxp_Opcode * opcode);
+
+
+/**
+ * Check if the node is equal to the message. Use the egxp_protocol_handler_condition_equals
+ * to check if the condition list is equal.
+ * @param node: The node to test
+ * @param message: The message to test
+ * @param opcode: The list of opcode defined
+ * @return 1 is the node and message are equals
+ */
+char egxp_protocol_handler_equals(Egxp_Node * node, 
+				  Egxp_Message * message, 
+				  Egxp_Opcode * opcode);
+
+
+/**
+ * This method should be useb by the ecore asynchronous mechanism in order to
+ * give xml data to the parser.
+ * @param data: Should be the Egxp type
+ * @param type: Type of the event (not used for now)
+ * @param ev: The event given by the ecore mechanism
+ * @return 1 (we need to take a look inside the ecore documentation ...)
+ */
+int egxp_protocol_handler_receive_server_cb (void *data, int type, Ecore_Con_Event_Server_Data *ev);
 
 #endif
