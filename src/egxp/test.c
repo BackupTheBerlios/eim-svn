@@ -39,7 +39,7 @@ int main (int argc, char ** argv) {
   
 
   /* display information about opcode */
-  egxp_opcode_display (eg->opcodes);
+  egxp_opcode_print (eg->opcodes);
   
   
 
