@@ -1,3 +1,9 @@
+2005-03-19(jol):
+	- Continue to work on the XmppIM -> make some stuff to fill the roster
+	- Add xmpp_im_callback and xmpp_im_opcode files
+	- Update some API documentation
+	- Update xmpp-im test file
+
 2005-03-13(jol):
 	- XmppIM protocole can be now registered/allocated/...
 	

@@ -159,3 +159,23 @@ void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child) {
   /* set the parent for the child */
   child->parent = parent;
 }
+
+
+Egxp_Node * egxp_node_get_child (Egxp_Node * node, int id) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_node_get_child\n");
+#endif
+  
+  assert (node && id>=0);
+  Egxp_Node * ntmp = NULL;
+  if (node->childs == NULL) return NULL;
+
+  /* get the good list */
+  Ecore_DList * ltmp = ecore_hash_get (node->childs, (int*)id);
+
+  /* if no child return NULL */
+  if (ltmp == NULL) return NULL;
+
+  /* go to the first node */
+  return ecore_dlist_goto_last(ltmp);
+}

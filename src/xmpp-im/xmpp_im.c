@@ -30,7 +30,8 @@ XmppIM * xmpp_im_register (Egxp *eg) {
   assert (eg);
 
   /* register xmpp_im opcode */
-  
+  xmpp_im_opcode_init (eg);
+
   /* add the xmppim_register */
   int id = egxp_opcode_add (eg->opcodes, XMPPIM_REGISTER);
   XmppIM * tmp = xmpp_im_new (eg);

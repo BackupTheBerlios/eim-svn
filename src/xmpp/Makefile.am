@@ -3,7 +3,7 @@ noinst_PROGRAMS = test
 test_SOURCES = \
 	test.c
 test_LDADD = \
-	-L$(top_srcdir)/src/egxp -legxp \
+	-L$(top_builddir)/src/egxp -legxp \
 	-lxmpp
 test_CFLAGS = $(ecore_cflags) $(IDN_CFLAGS) -I$(top_srcdir)/src
 

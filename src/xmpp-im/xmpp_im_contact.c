@@ -36,6 +36,7 @@ XmppIM_Contact * xmpp_im_contact_new (Xmpp_JID * jid, char * name) {
   tmp->jid = jid;
   tmp->name = strdup (name);
   tmp->groups = ecore_list_new ();
+  tmp->presence = -1; // not available
   
   return tmp;
 }

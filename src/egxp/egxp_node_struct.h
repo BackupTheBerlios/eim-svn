@@ -42,7 +42,10 @@ struct _Egxp_Condition {
 
 
 /**
- * This structure is really more simple
+ * The Egxp_Node structure is the core to describe a protocol.
+ * A node is describe by this opcode (tag), a parent node, condition list,
+ * and a child has.
+ * The child hash is organized like this: Childs<tag_id, dlist<Egxp_Node>>. 
  */
 typedef struct _Egxp_Node Egxp_Node;
 #define EGXP_NODE(o) ((Egxp_Node*)o)

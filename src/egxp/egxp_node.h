@@ -67,4 +67,13 @@ void egxp_node_add_condition (Egxp_Node* cn, Egxp_Condition * cond);
  */
 void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child);
 
+
+/**
+ * Get a child with the same id as the parameter id.
+ * If there is no child it return null, otherwise return the last
+ * child of the list.
+ * @return a child or null.
+ */
+Egxp_Node * egxp_node_get_child (Egxp_Node * node, int id);
+
 #endif

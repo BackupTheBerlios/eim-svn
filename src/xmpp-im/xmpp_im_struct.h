@@ -42,6 +42,9 @@ struct _XmppIM_Contact {
   /* the name of the contact */
   char * name;
 
+  /* presence value */
+  int presence;
+  
   /* List of group reference */
   Ecore_List * groups;
 };

@@ -1,6 +1,8 @@
 HIGH URGENCY
+- Add a function to display the protocol define by egxp, it will help to debug.
 - Create the XmppIM structure in order to fill the roster.
 - Fill the roster !
+
 
 LOW URGENCY
 - Should change the egxp_message to handle integer tag instead of char * tag.

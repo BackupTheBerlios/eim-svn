@@ -4,7 +4,7 @@
 #include "xmpp_im_struct.h"
 #include "xmpp_im_contact.h"
 #include "xmpp_im_roster.h"
-
+#include "xmpp_im_callback.h"
 
 #define XMPPIM_REGISTER "__XMPPIM_REGISTER__"
 
