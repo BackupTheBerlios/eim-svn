@@ -27,6 +27,8 @@
 #include "xmpp_opcode.h"
 #include "xmpp_callback.h"
 #include "xmpp_jid.h"
+#include "xmpp_auth.h"
+#include "xmpp_message.h"
 
 #define XMPP_REGISTER "__XMPP_REGISTER__"
 

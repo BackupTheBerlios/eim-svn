@@ -25,7 +25,9 @@
 
 
 /**
- * Stream begin callback
+ * Stream begin callback.
+ *  - try to get the stream id.
+ *  - send a message to authenticiate.
  */
 void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg);
 

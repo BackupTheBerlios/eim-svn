@@ -76,8 +76,9 @@ unsigned int egxp_connection_connect (Egxp_Connection *c);
  * object after send it.
  * @param c: The connection object
  * @param msg: The message
+ * @param end_tag: if set to 1 we send the last </tag> of the message, if it's equals to zero it not send the last tag ... 
  */
-void egxp_connection_send_message (Egxp_Connection *c, Egxp_Message * msg);
+void egxp_connection_send_message (Egxp_Connection *c, Egxp_Message * msg, unsigned int end_tag);
 
 
 /**

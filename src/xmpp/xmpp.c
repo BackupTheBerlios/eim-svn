@@ -59,6 +59,9 @@ Xmpp * xmpp_new (Egxp * eg) {
   /* set the user name */
   tmp->jid = NULL;
 
+  /* initialize authentification */
+  tmp->auth = NULL;
+
   /* return the xmpp */
   return tmp;
 }
@@ -72,6 +75,6 @@ void xmpp_free (Xmpp * x) {
   assert (x);
 
   if (x->jid) xmpp_jid_free(x->jid);
-  
+  if (x->auth) xmpp_auth_free(x->auth);
   FREE (x);
 }

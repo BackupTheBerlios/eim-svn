@@ -57,7 +57,7 @@ void egxp_connection_free (Egxp_Connection *c) {
 
 unsigned int egxp_connection_connect (Egxp_Connection *c) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_connection_connect\n");
+  printf("TRACE: egxp_connection_connect: %s:%d\n", c->host_addr, c->port);
 #endif
   assert (c);
 
@@ -79,15 +79,15 @@ unsigned int egxp_connection_connect (Egxp_Connection *c) {
 }
 
 
-void egxp_connection_send_message (Egxp_Connection *c, Egxp_Message * msg) {
+void egxp_connection_send_message (Egxp_Connection *c, Egxp_Message * msg, unsigned int end_tag) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_connection_send_message\n");
 #endif
   assert (c && msg);
 
   // to xml
-  char * buf = egxp_message_to_xml (msg, 1);
-  printf("log send: %s\n", buf);
+  char * buf = egxp_message_to_xml (msg, end_tag);
+  printf("log send: %s\nsize: %d\n", buf, strlen (buf));
   
   // free message
   egxp_message_free (msg);

@@ -20,6 +20,8 @@
 */
 #include <assert.h>
 
+#include "egxp/egxp.h"
+#include "xmpp.h"
 #include "xmpp_callback.h"
 
 
@@ -29,5 +31,19 @@ void xmpp_callback_stream_begin_cb (Egxp_Message * msg, void * eg) {
 #endif 
   assert (msg && eg);
   
+  /* get the xmpp protocol */
+  Xmpp * xm = XMPP( egxp_extension_get_from_string (EGXP(eg), XMPP_REGISTER));
+  assert (xm);
+
+  /* technically we should control childs of stream tag. But for
+     now we just try to authenticate our client NO-SASL */
   
+  /* check if there is a authentification object */
+  if (xm->auth == NULL) xm->auth = xmpp_auth_new ();
+
+  /* try to set the stream id */
+  xm->auth->stream_id = egxp_message_get_attribute (msg, XMPP_ATT_ID);
+  
+  /* now we can try to send the first message to be authenticied */
+  xmpp_auth_msg_no_sasl (xm);
 }

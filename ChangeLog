@@ -1,3 +1,8 @@
+2005-02-15(jol):
+	- now it's possible to connect to a server
+	- add the xmpp_auth file which should handle authentification process
+	- The first step of authentification is done
+	
 2005-02-13(jol):
 	- Add connection control inside egxp. So it's now possible to connect/disconnect 
 	  and get/send message to a server.
@@ -41,4 +46,3 @@
 	- fix a memleak from egxp_free
 	- add Egxp_ConditionalNode
 	- add TODO file
-	

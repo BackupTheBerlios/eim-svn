@@ -27,6 +27,10 @@
  * Here we define the xmpp opcodes
  */
 #define XMPP_TAG_STREAM "stream:stream"
+#define XMPP_TAG_IQ     "iq"
+#define XMPP_TAG_QUERY  "query"
+
+#define XMPP_TAG_USERNAME       "username"
 
 #define XMPP_ATT_XMLNS          "xmlns"
 #define XMPP_ATT_XMLNS_STREAM   "xmlns:stream"
@@ -46,8 +50,10 @@
 #define XMPP_ATT_FROM           "from"
 #define XMPP_ATT_NAME           "name"
 
+#define XMPP_VALUE_IQ_GET       "get"
+#define XMPP_VALUE_IQ_SET       "set"
 
-
+#define XMPP_VALUE_QUERY_AUTH   "jabber:iq:auth"
 
 /**
  * Add the xmpp opcode inside the opcode variable

@@ -26,6 +26,7 @@
 #include "egxp/egxp.h"
 
 #include "xmpp_jid.h"
+#include "xmpp_auth.h"
 
 typedef struct _Xmpp Xmpp;
 #define XMPP(o) ((Xmpp*)o)
@@ -35,6 +36,9 @@ struct _Xmpp {
   
   /* the jid */
   Xmpp_JID * jid;
+
+  /* the authentification structure */
+  Xmpp_Auth * auth;
 };
 
 #endif

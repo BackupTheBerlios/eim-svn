@@ -97,4 +97,9 @@ void egxp_extension_register (Egxp * e, int id, void * ext);
  */
 void * egxp_extension_get (Egxp *e, int id);
 
+
+/**
+ * @return the extension
+ */
+void * egxp_extension_get_from_string (Egxp *e, char * id);
 #endif

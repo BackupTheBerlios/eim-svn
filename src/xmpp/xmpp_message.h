@@ -21,6 +21,7 @@
 #ifndef xmpp_message_header_h_
 #define xmpp_message_header_h_
 
+#include "egxp/egxp_message.h"
 #include "xmpp_struct.h"
 
 /**
@@ -29,5 +30,24 @@
  */
 int xmpp_message_stream (Xmpp * x);
 
+
+/**
+ * This function is an helper function to 
+ * build preconfigured iq message.
+ * @param type: "set" or "get" must not be null
+ * @param id: "id of the query" must not be null
+ * @param to: "the destination"
+ * @return the build message
+ */
+Egxp_Message * xmpp_message_iq (char * type, char * id, char * to);
+
+
+/**
+ * This function is a helper function to build a preconfigured
+ * query message.
+ * @param xmlns: The xmlns value
+ * @return the query build message
+ */
+Egxp_Message * xmpp_message_query (char * xmlns);
 
 #endif

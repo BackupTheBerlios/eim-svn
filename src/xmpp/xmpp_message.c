@@ -34,7 +34,7 @@ int xmpp_message_stream (Xmpp * x) {
 #endif
   
   assert (x);
-
+  
   /**
    * Make the stream message
    */
@@ -52,14 +52,38 @@ int xmpp_message_stream (Xmpp * x) {
 			      egxp_message_attribute_new (XMPP_ATT_TO, 
 							  x->jid->host));
   
-  /* to xml */
-  char * buf = egxp_message_to_xml (message, 0);
-  
-  /* free message */
-  egxp_message_free (message);
+  /* send message */
+  /* get reference to the connection */
+  Egxp_Connection * conn = EGXP_EXTENSION(x)->parent->connection;
+  egxp_connection_send_message (conn, message, 0);
+}
 
-  // to be continued ...
+Egxp_Message * xmpp_message_iq (char * type, char * id, char * to) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_message_iq\n");
+#endif
+  assert (type && id);
   
-  /* free buffer */
-  FREE(buf);
+  /* create the iq */
+  Egxp_Message * msg = egxp_message_new (XMPP_TAG_IQ);
+  egxp_message_add_attribute (msg, egxp_message_attribute_new (XMPP_ATT_TYPE,
+							       type));
+  /* id */
+  egxp_message_add_attribute (msg, egxp_message_attribute_new (XMPP_ATT_ID,
+							       id));
+  /* to */
+  if (to) 
+    egxp_message_add_attribute (msg, egxp_message_attribute_new (XMPP_ATT_TO,
+								 to));
+  
+  return msg;
+}
+
+
+Egxp_Message * xmpp_message_query (char * xmlns) {
+  Egxp_Message * message = egxp_message_new (XMPP_TAG_QUERY);
+  egxp_message_add_attribute (message, 
+			      egxp_message_attribute_new (XMPP_ATT_XMLNS, 
+							  xmlns));
+  return message;
 }

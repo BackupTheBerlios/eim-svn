@@ -116,3 +116,13 @@ void * egxp_extension_get (Egxp *e, int id) {
 
   return ecore_hash_get (e->extensions, (int*)id);
 }
+
+void * egxp_extension_get_from_string (Egxp *e, char * id) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_extension_get_from_string\n");
+#endif
+  assert (e && id);
+  assert (e->extensions);
+
+  return egxp_extension_get (e, egxp_opcode_get_id (e->opcodes, id));
+}
