@@ -60,6 +60,15 @@ void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph);
 
 
 
-
+/**
+ * This method check if there is a child inside the node parameter which has 
+ * same properties than the message.
+ * 
+ * @param node : the node
+ * @param m: the message.
+ */
+Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, 
+                                            Egxp_Message * message,
+                                            Egxp_Opcode * opcode);
 
 #endif

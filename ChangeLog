@@ -1,3 +1,10 @@
+2005-02-10(jol):
+	- replace free statement with the EFL FREE macro
+	- fix some error around the callback stuff ...
+	- continue the work on egxp_protocol_handler. Now, we are able to
+	get the protocol node in function of the received message.
+	- add some documentation around egxp_node
+	
 2005-02-09(jol):
 	- Remove all complexe stuff, in fact i've remove child* and conditional* because they were too much complexe. I've replaced
 	all the stuff in a simple structure.

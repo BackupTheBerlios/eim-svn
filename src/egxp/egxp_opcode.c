@@ -126,12 +126,11 @@ const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_opcode_get_id\n");
 #endif
-  assert (op && name);
+  assert (op);
 
   int * tmp = ecore_hash_get (op->string_id, (char*)name);
   if (!tmp) {
-    printf("ERROR: opcode %s seems to has no id\n"); 
-    assert (0);
+    printf("ERROR: unknown opcode %s.\n"); 
     return -1;
   }
   

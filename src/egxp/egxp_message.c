@@ -56,7 +56,7 @@ Egxp_Message * egxp_message_new (char * tag_name) {
 void egxp_message_free (Egxp_Message * m) {
   if (m == NULL) return;
   
-  free (m->tagname);
+  FREE (m->tagname);
   ecore_list_destroy (m->attributes);
   ecore_list_destroy (m->childs);
   
@@ -65,7 +65,7 @@ void egxp_message_free (Egxp_Message * m) {
     egxp_message_remove_child (m->parent, m);
   }
   
-  free (m);
+  FREE (m);
 }
 
 Egxp_Message * egxp_message_get_child (Egxp_Message *m, char * tagname) {
@@ -238,7 +238,7 @@ char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
       buf_len += len;
       buf = (char*) realloc (buf, buf_len);
       buf = strncat (buf, tmp_buf, len);
-      free (tmp_buf);
+      FREE (tmp_buf);
     }
     
     // the termination tag
@@ -258,7 +258,7 @@ void egxp_message_print(Egxp_Message *m) {
   if (m == NULL) return;
   char * buf = egxp_message_to_xml (m, 1);
   printf("%s\n", buf);
-  free(buf);
+  FREE(buf);
 }
 
 
@@ -280,7 +280,7 @@ Egxp_MessageAttribute * egxp_message_attribute_new (char * key, char * value) {
 void egxp_message_attribute_free (Egxp_MessageAttribute * ma) {
   if (ma == NULL) return;
   
-  free (ma->key);
-  free (ma->value);
-  free (ma);
+  FREE (ma->key);
+  FREE (ma->value);
+  FREE (ma);
 }

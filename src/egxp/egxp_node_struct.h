@@ -54,11 +54,11 @@ struct _Egxp_Node {
   Egxp_Node * parent;
   
   /* the callback */
-  egxp_callback_ptr * begin_cb;
-  egxp_callback_ptr * end_cb; 
+  egxp_callback_ptr begin_cb;
+  egxp_callback_ptr end_cb; 
   
-  /* conditions are inside a hash */
-  Ecore_Hash * conditions;
+  /* conditions are inside a list */
+  Ecore_List * conditions;
   
   /* the child. It's a hash<tag_id, list<Egxp_NodeBase*>> */
   Ecore_Hash * childs;

@@ -30,7 +30,7 @@
 
 Egxp_Node * egxp_node_new (const int tag) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_node__base_new\n");
+  printf("TRACE: egxp_node_new\n");
 #endif 
 
   Egxp_Node * tmp = EGXP_NODE(malloc(sizeof(Egxp_Node)));
@@ -57,14 +57,14 @@ void egxp_node_free (Egxp_Node * n) {
 #endif 
   assert (n);
   
-  if (n->conditions) ecore_hash_destroy (n->conditions);
+  if (n->conditions) ecore_list_destroy (n->conditions);
   if (n->childs) ecore_hash_destroy (n->childs);
-  free (n);
+  FREE (n);
 }
 
 
 
-void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end) {
+void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr begin, egxp_callback_ptr end) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_node_set_cb\n");
 #endif 
@@ -86,12 +86,44 @@ void egxp_node_add_condition (Egxp_Node * cn, Egxp_Condition * cond) {
   
   /* check if the conditions lists is created */
   if (cn->conditions == NULL) {
-    cn->conditions = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
-    ecore_hash_set_free_value (cn->conditions, (Ecore_Free_Cb)egxp_condition_free);
+    cn->conditions = ecore_list_new ();
+    ecore_list_set_free_cb (cn->conditions, (Ecore_Free_Cb)egxp_condition_free);
   }
   
   /* append the condition */
-  ecore_hash_set (cn->conditions, (int*)cond->key, cond);
+  ecore_list_append (cn->conditions, cond);
+}
+
+
+void egxp_node_add_in_order (Ecore_DList * l, Egxp_Node * n) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_node_add_in_order\n");
+#endif
+
+  assert (l && n);
+  Egxp_Node * pn = NULL;
+
+  /* before doing anything, check if there is condition,
+     if not we add it to the end if the list */
+  if (n->conditions == NULL || ecore_list_nodes (l) == 0) {
+    ecore_dlist_append (l, n);
+    return;
+  }
+  
+  
+  /* go to the first node */
+  ecore_dlist_goto_first(l);
+  
+  while((pn = EGXP_NODE(ecore_dlist_next(l))) != NULL) {
+    if (pn->conditions == NULL || 
+        ecore_dlist_nodes (n->conditions) > ecore_dlist_nodes(pn->conditions)) {
+      ecore_dlist_previous(l);
+      ecore_dlist_insert (l, n);
+      return;
+    }
+  }
+  
+  ecore_dlist_append (l, n);
 }
 
 
@@ -106,23 +138,24 @@ void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child) {
     /* create a hash */
     parent->childs = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
     /* destroy each element */
-    ecore_hash_set_free_value (parent->childs, (Ecore_Free_Cb)ecore_list_destroy);
+    ecore_hash_set_free_value (parent->childs, (Ecore_Free_Cb)ecore_dlist_destroy);
   }
   
   /* try to get the list for the special tag */
-  Ecore_List * ltmp = ecore_hash_get (parent->childs, (int*)child->tag);
+  Ecore_DList * ltmp = ECORE_DLIST (ecore_hash_get (parent->childs, (int*)child->tag));
   
   if (ltmp == NULL) {
     /* doesn't exist, so create it */
-    ltmp = ecore_list_new ();
-    ecore_list_set_free_cb (ltmp,(Ecore_Free_Cb)egxp_node_free);
+    ltmp = ecore_dlist_new ();
+    ecore_dlist_set_free_cb (ltmp,(Ecore_Free_Cb)egxp_node_free);
     
     /* append the list to the hash, hash is indexed by the tag id */
     ecore_hash_set (parent->childs, (int*)child->tag, ltmp);
   }
   
   /* now append the child to the list */
-  ecore_list_append (ltmp, child);
+  egxp_node_add_in_order (ltmp, child);
+
   /* set the parent for the child */
   child->parent = parent;
 }

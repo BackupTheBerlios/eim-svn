@@ -51,8 +51,9 @@ Egxp_ProtocolHandler * egxp_protocol_handler_new (struct _Egxp * e) {
   XML_SetCharacterDataHandler(tmp->parser,  egxp_protocol_handler_char_data);
 
   /* initialize the protocol stack */
-  tmp->protocol_stack = NULL;
-  
+  tmp->protocol_stack = e->root;
+  assert (tmp->protocol_stack != NULL);
+
   return tmp;
 }
 
@@ -91,14 +92,10 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   int i;
   char use_callback = 0;
+  Egxp_Node * node = NULL;
 
   assert (eg && ph);
 
-  /* really hard stuff here, we need to keep in a stack the protocol evolution
-     in order to call the correct callback */
-
-  /* we need to store the message hierarchy here (current_msg) */
-  
   /* build the message with the specific id */
   /* NOTE we should update the egxp_message to use integer id */
   Egxp_Message * message = egxp_message_new ((char*) name);
@@ -115,41 +112,21 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
     egxp_message_add_child (ph->current_msg, message);
     ph->current_msg = message;
   }
-
-  /* need to detect which callback to call, if an element in not 
-     inside the protocol */
-  if (ph->protocol_stack == NULL) {
-    /* if null it's because it's the first time we are here 
-       so we need to check inside  protocol tree if the tag
-       is the root.
-    */
-    assert (eg->root);
-    
-    if (!strcmp (egxp_opcode_get_string (eg->opcodes, eg->root->tag),
-		 name)) {
-      /* they are equals, we begin :p */
-      ph->protocol_stack = eg->root;
-      use_callback = 1;
-    } else {
-      /* seems to be an error */
-    }
-  } else {
-    /* 
-       we check if the protocol_stack element has the name as
-       child node, if the tag name is present we are on the 
-       good way, otherwise it seems that the implementation is 
-       not completed
-    */
-    
-  }
-
   
-  /*
-    if all is ok, we can call the callback associated to this
-    message (check the use_callback value)
-  */
-  if (use_callback) {
-    assert (ph->protocol_stack);
+  /* manage protocol */
+  assert (ph->protocol_stack);
+  
+  /* try to get the Egxp_Node correspond to the tag id and parameter */
+  node = egxp_protocol_handler_get_node (ph->protocol_stack, message, eg->opcodes);
+  
+  if (node == NULL) {
+    /* do nothing */
+  } else {
+    /* update the hierarchy */
+    ph->protocol_stack = node;
+    
+    /* take a look if it's possible to execute the callback */
+    if (node->begin_cb) node->begin_cb (message, eg);
   }
 }
 
@@ -168,4 +145,59 @@ void egxp_protocol_handler_char_data (void *userData, const XML_Char *s, int len
   assert (userData);
   
   
+}
+
+
+
+Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, Egxp_Message * message, Egxp_Opcode * opcode) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_protocol_handler_get_node\n");
+#endif
+  
+  assert (node && message);
+  Egxp_Node * ntmp = NULL;
+  if (node->childs == NULL) return NULL;
+  
+  /* get the good list */
+  Ecore_DList * ltmp = ecore_hash_get (node->childs,
+                                       (int*)egxp_opcode_get_id (opcode, message->tagname));
+  if (ltmp == NULL) return NULL;
+  
+  /* go to the first node */
+  ecore_dlist_goto_first(ltmp);
+  while ( (ntmp = ecore_dlist_next(ltmp)) != NULL) {
+    /* check if all conditions of the ntmp is inside the message */
+    if (ntmp->conditions == NULL) {
+      return ntmp;
+    }else {
+      Egxp_Condition * cond = NULL;
+      char condition_ok = 1;
+      ecore_list_goto_first (ntmp->conditions);
+      /* browse all condition of the node */
+      while ( (cond = ecore_list_next (ntmp->conditions)) != NULL) {
+        char * attr_val = egxp_message_get_attribute (message, (char*)egxp_opcode_get_string (opcode, cond->key));
+        /* if we have not found a condition */
+        if (attr_val == NULL) {
+          condition_ok = 0;
+          break;
+        }
+        
+        /* check now if the value is the correct value */
+        if( cond->value == egxp_opcode_get_id (opcode, attr_val)) {
+          FREE (attr_val);
+          continue;
+        } else {
+          FREE (attr_val);
+          condition_ok = 0;
+          break;
+        }
+      } 
+
+      /* check if the node is ok */
+      if (condition_ok) return ntmp;
+    }
+  }
+  
+  /* not found */
+  return NULL;
 }
