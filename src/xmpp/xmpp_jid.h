@@ -71,4 +71,9 @@ char * xmpp_jid_get_bare (Xmpp_JID * jid);
  */
 char * xmpp_jid_get_full (Xmpp_JID * jid);
 
+
+/**
+ * @return true if a user is set, false otherwise.
+ */
+unsigned int xmpp_jid_has_user (Xmpp_JID * jid);
 #endif

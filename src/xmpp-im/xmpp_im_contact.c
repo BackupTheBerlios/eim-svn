@@ -127,6 +127,34 @@ XmppIM_Contact * xmpp_im_contact_create_from_item_message (XmppIM_Roster * r, Eg
   /* free the jid from the message */
   free(jid);
   
+  /* process group */
+  if (egxp_message_is_empty(m)) {
+    /* select a default group in function of the jid */
+    char * default_grp;
+    if (! xmpp_jid_has_user (contact->jid)) default_grp = "__TRANSPORT__";
+    else default_grp = "__GENERAL__";
+    /* add the group to the contact */
+    xmpp_im_roster_add_contact_to_group (r, contact, default_grp);
+    return contact;
+  }
+
+  /* register the contact for each group  */
+  Ecore_List * grp_list = egxp_message_get_childs (m, "group");
+  ecore_list_goto_first(grp_list);
+  Egxp_Message * msg_item;
+  while((msg_item = EGXP_MESSAGE(ecore_list_next(grp_list))) != NULL) {
+    /* the group name is inside the data */
+    char * grp_name = egxp_message_get_data (msg_item);
+
+    /* add the contact to the group */
+    xmpp_im_roster_add_contact_to_group (r, contact, grp_name);
+    
+    /* free the group name */
+    free (grp_name);
+  }
+
+  /* free the list */
+  ecore_list_destroy (grp_list);
 
   return contact;
 }

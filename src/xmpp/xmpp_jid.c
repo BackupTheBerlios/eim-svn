@@ -132,3 +132,15 @@ char * xmpp_jid_get_full (Xmpp_JID * jid) {
   
   return tmp;
 }
+
+
+unsigned int xmpp_jid_has_user (Xmpp_JID * jid) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_jid_has_user\n");
+#endif 
+  assert (jid);
+  if (jid->user) {
+  	return strlen (jid->user) != 0;
+  }
+  return 0;
+}

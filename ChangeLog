@@ -1,3 +1,7 @@
+2005-03-22(jol):
+	- Now all contacts and group are stored in memory,
+	- Minor add inside xmpp_jid.
+	
 2005-03-21(jol):
 	- Add egxp_node_print to display the defined protocol,
 	- Add egxp_display to show all information to the egxp structure,

@@ -253,6 +253,7 @@ void xmpp_im_roster_update_from_item_messages (XmppIM_Roster *r, Ecore_List * li
   Egxp_Message * msg_item;
   ecore_list_goto_first(list);
   while ((msg_item = EGXP_MESSAGE(ecore_list_next(list))) != NULL) {
-	
+	xmpp_im_contact_create_from_item_message(r, msg_item);
   }
+  xmpp_im_roster_display(r);
 }
