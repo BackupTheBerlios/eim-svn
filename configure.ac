@@ -76,5 +76,6 @@ Makefile
 src/Makefile
 src/egxp/Makefile
 src/xmpp/Makefile
+src/xmpp-im/Makefile
 doc/Makefile
 ])

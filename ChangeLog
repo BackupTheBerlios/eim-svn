@@ -1,3 +1,7 @@
+2005-02-28(jol):
+	- Just a first implementation of the Roster, Group and Contact
+	- Give an test example to check memory leak and the behavior of the new code
+	
 2005-02-24(jol):
 	- Fix the bug ! The message was not correctly remove from the child list
 	of a message. The reason is that i didn't use correctly the ecore_list functions.

@@ -1,2 +1,6 @@
-SUBDIRS=egxp xmpp
+SUBDIRS= \
+	egxp    \
+	xmpp	\
+	xmpp-im
+
 
