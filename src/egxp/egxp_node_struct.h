@@ -14,10 +14,10 @@ typedef void (*egxp_callback_ptr)(Egxp_Message *, void*);
 typedef struct _Egxp_ChildNode Egxp_ChildNode;
 #define EGXP_CHILDNODE(o) ((Egxp_ChildNode*)o)
 struct _Egxp_ChildNode {
+  Ecore_Hash * childs; /* hash map, the key is the tag, value is a Egxp node */
+
   egxp_callback_ptr * begin_func; /* called when the start tag appears */
   egxp_callback_ptr * end_func;   /* called when the end tag appears */
-  
-  Ecore_Hash * childs; /* hash map, the key is the tag, value is a Egxp node */
 };
 
 
@@ -27,11 +27,12 @@ struct _Egxp_ChildNode {
 typedef struct _Egxp_Node Egxp_Node;
 #define EGXP_NODE(o) ((Egxp_Node*)o)
 struct _Egxp_Node {
+  Egxp_ChildNode * child; /* this is a pointer on a child, it's used when no specific condition
+			     are specified */
+  
   unsigned int tag; /* this is the id of the tag */
   
-  Egxp_ChildNode * child; /* this is a pointer on a child, it's used when no specific condition
-			      are specified */
-  Ecore_List * conditions; /* this is a list of conditionnal attributes -> epgx_conditional node */
+  Ecore_List * conditions; /* this is a list of conditionnal Node attributes -> epgx_conditional node */
 };
 
 
@@ -47,9 +48,11 @@ struct _Egxp_Condition {
 typedef struct _Egxp_ConditionalNode Egxp_ConditionalNode;
 #define EGXP_CONDITIONALNODE(o) ((Egxp_ConditionalNode*)o)
 struct _Egxp_ConditionalNode {
+  Egxp_ChildNode * child;
+  
   Egxp_Node * parent; /* the parent of this node, it's necessary to know the tag, but maybe 
 			 useless ... */
-  Egxp_ChildNode * child;
+  
   Ecore_List * conditions; /* this is the list of the condition */
 };
 

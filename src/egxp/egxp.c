@@ -20,4 +20,5 @@ void egxp_free (Egxp * e) {
   assert (e);
   egxp_opcode_free (e->opcodes);
   if (e->root) egxp_node_free(e->root);
+  free (e);
 }

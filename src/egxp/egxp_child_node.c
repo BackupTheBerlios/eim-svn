@@ -40,10 +40,8 @@ void egxp_child_node_add_node (Egxp_ChildNode * cn, Egxp_Node * c) {
 
   /* if not defined we create it */
   if (cn->childs == NULL) {
-    cn->childs = ecore_hash_new (ecore_direct_hash, 
-				 ecore_direct_compare);
-    ecore_hash_set_free_value (cn->childs,
-			       (Ecore_Free_Cb)egxp_node_free);
+    cn->childs = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
+    ecore_hash_set_free_value (cn->childs, (Ecore_Free_Cb)egxp_node_free);
   }
   
   /* so now we can add it */
