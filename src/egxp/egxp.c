@@ -32,14 +32,16 @@ Egxp * egxp_new () {
   tmp->opcodes = egxp_opcode_new ();
   
   /* the root of the protocol */
-  tmp->root = NULL;
+  tmp->root = egxp_node_new (egxp_opcode_get_id (tmp->opcodes, 
+						      "__ROOT__"));
+  
   
   /* initialize the user data */
   tmp->user_data = NULL;
   
   /* define the protocol handler */
   tmp->protocol_handler = egxp_protocol_handler_new (tmp);
-
+  
   return tmp;
 }
 

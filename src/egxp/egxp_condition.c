@@ -44,7 +44,7 @@ void egxp_condition_free (Egxp_Condition * condition) {
 }
 
 
-unsigned char egxp_condition_equals (Egxp_Condition * condition, const unsigned int key, const unsigned int value) {
+unsigned char egxp_condition_equals (Egxp_Condition * condition, const int key, const int value) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_condition_equals\n");
 #endif

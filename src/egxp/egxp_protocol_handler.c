@@ -49,6 +49,9 @@ Egxp_ProtocolHandler * egxp_protocol_handler_new (struct _Egxp * e) {
 			egxp_protocol_handler_start_element, 
 			egxp_protocol_handler_end_element);
   XML_SetCharacterDataHandler(tmp->parser,  egxp_protocol_handler_char_data);
+
+  /* initialize the protocol stack */
+  tmp->protocol_stack = NULL;
   
   return tmp;
 }
@@ -65,7 +68,7 @@ void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph) {
 
   /* do we need to free the message ? */
   if (ph->current_msg) {
-    // ???
+    egxp_message_free (ph->current_msg);
   }
   
   free (ph);
@@ -83,11 +86,71 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
 #endif
   assert (userData && name);
   
+  /* cast the egxp variable */
+  Egxp * eg = EGXP (userData);
+  Egxp_ProtocolHandler * ph = eg->protocol_handler;
+  int i;
+  char use_callback = 0;
+
+  assert (eg && ph);
+
   /* really hard stuff here, we need to keep in a stack the protocol evolution
      in order to call the correct callback */
 
   /* we need to store the message hierarchy here (current_msg) */
   
+  /* build the message with the specific id */
+  /* NOTE we should update the egxp_message to use integer id */
+  Egxp_Message * message = egxp_message_new ((char*) name);
+  
+  /* process attributes */
+  for (i = 0; atts[i]; i += 2)
+    egxp_message_add_attribute (message,
+				egxp_message_attribute_new((char*)atts[i],(char*) atts[i+1]));
+  
+  /* attach the message */
+  if (ph->current_msg == NULL) {
+    ph->current_msg = message;
+  } else {
+    egxp_message_add_child (ph->current_msg, message);
+    ph->current_msg = message;
+  }
+
+  /* need to detect which callback to call, if an element in not 
+     inside the protocol */
+  if (ph->protocol_stack == NULL) {
+    /* if null it's because it's the first time we are here 
+       so we need to check inside  protocol tree if the tag
+       is the root.
+    */
+    assert (eg->root);
+    
+    if (!strcmp (egxp_opcode_get_string (eg->opcodes, eg->root->tag),
+		 name)) {
+      /* they are equals, we begin :p */
+      ph->protocol_stack = eg->root;
+      use_callback = 1;
+    } else {
+      /* seems to be an error */
+    }
+  } else {
+    /* 
+       we check if the protocol_stack element has the name as
+       child node, if the tag name is present we are on the 
+       good way, otherwise it seems that the implementation is 
+       not completed
+    */
+    
+  }
+
+  
+  /*
+    if all is ok, we can call the callback associated to this
+    message (check the use_callback value)
+  */
+  if (use_callback) {
+    assert (ph->protocol_stack);
+  }
 }
 
 void egxp_protocol_handler_end_element(void *userData, const char *name) {

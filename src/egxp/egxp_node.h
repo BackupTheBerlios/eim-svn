@@ -23,42 +23,19 @@
 
 #include "egxp_node_struct.h"
 
+/****************************************************************/
+/****************************************************************/
+/****************************************************************/
+Egxp_Node * egxp_node_new (const int tag);
 
-/**
- * Create an initialize the structure
- * @param tag: the id of this node
- */
-Egxp_Node * egxp_node_new (const unsigned int tag);
+void egxp_node_free (Egxp_Node * n);
 
-
-/**
- * Free the memory ...
- */
-void egxp_node_free (Egxp_Node *n);
-
-
-/**
- * Add the callback function to the node
- * @param begin:
- * @param end:
- */
 void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end);
 
 
-/**
- * Add a node to the node
- * @param parent: the parent node
- * @param end: the child node
- */
-void egxp_node_add_child_node (Egxp_Node * parent, Egxp_Node * child);
+void egxp_node_add_condition (Egxp_Node* cn, Egxp_Condition * cond);
 
 
-/**
- * Add a Conditional node to the node
- * @param parent: the parent node
- * @param end: the child node
- */
-void egxp_node_add_conditional_node (Egxp_Node * parent, Egxp_ConditionalNode * child);
-
+void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child);
 
 #endif

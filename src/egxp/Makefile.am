@@ -13,22 +13,18 @@ pkgincludeinput_HEADERS= \
 	egxp_condition.h     \
 	egxp_message.h       \
 	egxp_node_struct.h   \
-	egxp_child_node.h    \
 	egxp_node.h          \
 	egxp_opcode.h        \
 	egxp.h               \
-	egxp_conditional_node.h \
 	egxp_protocol_handler.h
 
 
 libegxp_la_SOURCES = \
 	egxp_condition.c    \
 	egxp_message.c      \
-	egxp_child_node.c   \
 	egxp_node.c         \
 	egxp_opcode.c       \
 	egxp.c              \
-	egxp_conditional_node.c \
 	egxp_protocol_handler.c
 
 libegxp_la_LIBADD = $(ecore_libs) $(IDN_LIBS) $(EXPAT_LIB)

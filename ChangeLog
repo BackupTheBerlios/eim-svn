@@ -1,3 +1,11 @@
+2005-02-09(jol):
+	- Remove all complexe stuff, in fact i've remove child* and conditional* because they were too much complexe. I've replaced
+	all the stuff in a simple structure.
+
+2005-02-08(jol):
+	- During the Egxp_Opcode creation add automaticly the __ROOT__ opcode. It will be used by the egxp as initial node.
+	- During the Egxp creation add a root node __ROOT__
+	
 2005-02-07(jol):
 	- do not return pointer with egxp_opcode_get_id
 	- add functions to egxp_conditional_node with some helper function

@@ -38,6 +38,9 @@ Egxp_Opcode * egxp_opcode_new () {
   tmp->id = 0;
   tmp->need_update = 0;
 
+  /* add automaticly the __ROOT__ element */
+  egxp_opcode_add (tmp, "__ROOT__");
+    
   return tmp;
 }
 

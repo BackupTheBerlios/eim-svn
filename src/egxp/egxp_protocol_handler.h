@@ -22,7 +22,9 @@
 #define egxp_protocol_handler_header_h_
 
 #include <expat.h>
+
 #include "egxp_message.h"
+#include "egxp_node_struct.h"
 
 struct _Egxp;
 
@@ -35,6 +37,9 @@ struct _Egxp_ProtocolHandler {
 
   /* the XML Parser */
   XML_Parser parser;
+
+  /* the protocol stack */
+  Egxp_Node * protocol_stack;
 };
 
 

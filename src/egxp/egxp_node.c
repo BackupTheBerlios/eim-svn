@@ -24,79 +24,105 @@
 
 #include <Ecore_Data.h>
 
-#include "egxp_child_node.h"
-#include "egxp_conditional_node.h"
+#include "egxp_condition.h"
 #include "egxp_node.h"
 
-Egxp_Node * egxp_node_new (const unsigned int tag) {
+
+Egxp_Node * egxp_node_new (const int tag) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_node_new\n");
+  printf("TRACE: egxp_node__base_new\n");
 #endif 
 
   Egxp_Node * tmp = EGXP_NODE(malloc(sizeof(Egxp_Node)));
   
+  /* initialize the node */
   tmp->tag = tag;
+  tmp->parent = NULL;
   
-  tmp->child = NULL;
+  tmp->begin_cb = NULL;
+  tmp->end_cb = NULL;
+  
   tmp->conditions = NULL;
+  
+  tmp->childs = NULL;
   
   return tmp;
 }
 
 
-void egxp_node_free (Egxp_Node *n) {
+
+void egxp_node_free (Egxp_Node * n) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_node_free\n");
 #endif 
-
   assert (n);
   
-  if (n->child) egxp_child_node_free (n->child);
-  if (n->conditions) ecore_list_destroy (n->conditions);
+  if (n->conditions) ecore_hash_destroy (n->conditions);
+  if (n->childs) ecore_hash_destroy (n->childs);
   free (n);
 }
 
 
+
 void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_node_set_callback\n");
+  printf("TRACE: egxp_node_set_cb\n");
 #endif 
-
+  
   assert (n);
   
-  /* check if the child node is created */
-  if (n->child == NULL) n->child = egxp_child_node_new ();
-  
   /* set the attributes */
-  n->child->begin_func = begin;
-  n->child->end_func = end;
+  n->begin_cb = begin;
+  n->end_cb = end;
 }
 
 
-void egxp_node_add_child_node (Egxp_Node * parent, Egxp_Node * child) {
+void egxp_node_add_condition (Egxp_Node * cn, Egxp_Condition * cond) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_node_add_child_node\n");
+  printf("TRACE: egxp_node_add_condition\n");
 #endif
-  assert (parent && child);
-
-  /* check if the child node is created */
-  if (parent->child == NULL) parent->child = egxp_child_node_new ();
-
-  /* add the node to the child element */
-  egxp_child_node_add_node (parent->child, child);  
-}
-
-
-void egxp_node_add_conditional_node (Egxp_Node * parent, Egxp_ConditionalNode * child) {
-#ifdef EGXP_DEBUG
-  printf("TRACE: egxp_node_add_conditional_node\n");
-#endif
-  assert (parent && child);
-
-  if (parent->conditions == NULL) {
-    parent->conditions = ecore_list_new ();
-    ecore_list_set_free_cb (parent->conditions, egxp_conditional_node_free);
+  
+  assert (cn && cond);
+  
+  /* check if the conditions lists is created */
+  if (cn->conditions == NULL) {
+    cn->conditions = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
+    ecore_hash_set_free_value (cn->conditions, (Ecore_Free_Cb)egxp_condition_free);
   }
   
-  ecore_list_append (parent->conditions, child);
+  /* append the condition */
+  ecore_hash_set (cn->conditions, (int*)cond->key, cond);
+}
+
+
+void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_node_add_child\n");
+#endif
+  
+  assert (parent && child);
+
+  if (parent->childs == NULL) {
+    /* create a hash */
+    parent->childs = ecore_hash_new (ecore_direct_hash, ecore_direct_compare);
+    /* destroy each element */
+    ecore_hash_set_free_value (parent->childs, (Ecore_Free_Cb)ecore_list_destroy);
+  }
+  
+  /* try to get the list for the special tag */
+  Ecore_List * ltmp = ecore_hash_get (parent->childs, (int*)child->tag);
+  
+  if (ltmp == NULL) {
+    /* doesn't exist, so create it */
+    ltmp = ecore_list_new ();
+    ecore_list_set_free_cb (ltmp,(Ecore_Free_Cb)egxp_node_free);
+    
+    /* append the list to the hash, hash is indexed by the tag id */
+    ecore_hash_set (parent->childs, (int*)child->tag, ltmp);
+  }
+  
+  /* now append the child to the list */
+  ecore_list_append (ltmp, child);
+  /* set the parent for the child */
+  child->parent = parent;
 }

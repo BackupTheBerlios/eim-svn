@@ -23,12 +23,10 @@
 #define egxp_header_h_
 
 #include "egxp_node_struct.h"
-#include "egxp_child_node.h"
 #include "egxp_node.h"
 #include "egxp_opcode.h"
 #include "egxp_condition.h"
 #include "egxp_message.h"
-#include "egxp_conditional_node.h"
 #include "egxp_protocol_handler.h"
 
 
