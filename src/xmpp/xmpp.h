@@ -32,6 +32,9 @@
 
 #define XMPP_REGISTER "__XMPP_REGISTER__"
 
+#define XMPP_GET(_eg) \
+       XMPP(egxp_extension_get_from_string (_eg, XMPP_REGISTER))
+
 /**
  * Register the xmpp protocol
  *  - initialize the xmpp structure

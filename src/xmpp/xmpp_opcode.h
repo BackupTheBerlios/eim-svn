@@ -84,4 +84,12 @@
 void xmpp_opcode_init (Egxp * eg);
 
 
+/**
+ * It is an helper function to reduce code size. It create an Egxp_Node 
+ * with specific value.
+ * @param opcodes: the opcodes structure used to get id.
+ * @param type: The type of the iq message (get, set, result)
+ * @param id: The id of the message. If the id is null the id condition is not added.
+ */
+Egxp_Node * xmpp_opcode_iq (Egxp_Opcode * opcodes, char * type, char * id);
 #endif

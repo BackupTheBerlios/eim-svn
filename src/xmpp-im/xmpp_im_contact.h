@@ -56,4 +56,13 @@ void xmpp_im_contact_remove_all_group (XmppIM_Contact * c);
  */
 void xmpp_im_contact_display (void *c, void * user_data);
 
+
+/**
+ * This method try to create a contact, or to update it.
+ * If the contact is created, it is automatically added to the roster
+ * @param r: The roster where we can add the contact
+ * @param m: The message used to create/update the contact
+ * @return the created/updated contact.
+ */
+XmppIM_Contact * xmpp_im_contact_create_from_item_message (XmppIM_Roster * r, Egxp_Message * m);
 #endif

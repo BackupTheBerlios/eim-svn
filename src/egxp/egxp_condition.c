@@ -55,3 +55,11 @@ unsigned char egxp_condition_equals (Egxp_Condition * condition, const int key, 
 
   return condition->key == key && condition->value == value;
 }
+
+void egxp_condition_print (Egxp_Condition * c, Egxp_Opcode * op) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_condition_print\n");
+#endif
+  assert (c && op);
+  printf("  condition: %s  --  %s\n", egxp_opcode_get_string(op, c->key), egxp_opcode_get_string(op, c->value));
+}

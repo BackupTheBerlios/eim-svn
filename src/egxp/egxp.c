@@ -79,6 +79,19 @@ void egxp_free (Egxp * e) {
 }
 
 
+void egxp_display (Egxp *e) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_display\n");
+#endif
+  assert (e);
+  /* display registered opcode */
+  egxp_opcode_print(e->opcodes);
+
+  /* display registered protocol */
+  egxp_node_print (e->root, e->opcodes);
+}
+
+
 void egxp_extension_free (void * e) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_extension_free\n");

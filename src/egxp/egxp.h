@@ -86,6 +86,11 @@ void egxp_free (Egxp * e);
 
 
 /**
+ * Display the information relative to the Egxp Structure
+ */
+void egxp_display (Egxp *e);
+
+/**
  * Register an extension. It allows to store data, so when you define 
  * other extension you can store you're structure inside
  */

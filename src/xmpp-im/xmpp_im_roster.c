@@ -240,3 +240,19 @@ void xmpp_im_roster_display (XmppIM_Roster *r) {
   printf("--- Roster Information ---\n");
   ecore_hash_for_each_node (r->groups, ECORE_FOR_EACH(xmpp_im_roster_group_display), NULL);
 }
+
+
+
+
+void xmpp_im_roster_update_from_item_messages (XmppIM_Roster *r, Ecore_List * list) {
+#ifdef XMPPIM_DEBUG
+  printf("TRACE: xmpp_im_roster_update_from_item_messages\n");
+#endif
+  assert (r && list);
+
+  Egxp_Message * msg_item;
+  ecore_list_goto_first(list);
+  while ((msg_item = EGXP_MESSAGE(ecore_list_next(list))) != NULL) {
+	
+  }
+}

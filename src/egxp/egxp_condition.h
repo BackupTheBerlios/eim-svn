@@ -22,6 +22,7 @@
 #define egxp_condition_header_h_
 
 #include "egxp_node_struct.h"
+#include "egxp_opcode.h"
 
 /**
  * Create a egxp condition structure initialized with it parameters
@@ -40,5 +41,12 @@ void egxp_condition_free (Egxp_Condition * condition);
  */
 unsigned char egxp_condition_equals (Egxp_Condition * condition, const int key, const int value);
 
- 
+
+/**
+ * Display the Egxp_Condition structure
+ * @param c: The egxp condition to display
+ * @param op: use to get the string representation.
+ */
+void egxp_condition_print (Egxp_Condition * c, Egxp_Opcode * op); 
+
 #endif

@@ -21,6 +21,9 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "xmpp/xmpp_opcode.h"
+#include "xmpp/xmpp_jid.h"
+#include "xmpp_im_roster.h"
 #include "xmpp_im_contact.h"
 
 XmppIM_Contact * xmpp_im_contact_new (Xmpp_JID * jid, char * name) {
@@ -92,4 +95,38 @@ void xmpp_im_contact_display (void *contact, void * user_data) {
   char * tmp = xmpp_jid_get_full (c->jid);
   printf("Surname %s jid: %s\n", c->name, tmp);
   FREE (tmp);
+}
+
+
+XmppIM_Contact * xmpp_im_contact_create_from_item_message (XmppIM_Roster * r, Egxp_Message * m) {
+#ifdef XMPPIM_DEBUG
+  printf("TRACE: xmpp_im_contact_create_from_item_message\n");
+#endif
+  assert (r && m);
+
+  /* get the jid (bare) from the message */
+  char * jid = egxp_message_get_attribute (m, XMPP_ATT_JID);
+  assert (jid);
+
+  /* check if we have already this contact */
+  XmppIM_Contact * contact = xmpp_im_roster_get_contact(r, jid);
+
+  if (contact == NULL) {
+    Xmpp_JID * tmp_jid = xmpp_jid_new_from_bare (jid);
+    /* get the name of the contact*/
+    char * contact_name = egxp_message_get_attribute (m, XMPP_ATT_NAME);
+    /* create a contact inside the contact variable */
+    if(contact_name == NULL) {
+      contact = xmpp_im_contact_new (tmp_jid, jid);
+    } else {
+      contact = xmpp_im_contact_new (tmp_jid, contact_name);
+      free (contact_name);
+    }
+    xmpp_im_roster_add_contact(r, contact);
+  }
+  /* free the jid from the message */
+  free(jid);
+  
+
+  return contact;
 }

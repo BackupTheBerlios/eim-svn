@@ -95,7 +95,18 @@ void xmpp_im_roster_display (XmppIM_Roster *r);
 
 
 /**
- * Create a group
+ * This method update the roster with information coming from
+ * message
+ * @param r: The roster to update
+ * @param list: A list of "item" message.
+ */
+void xmpp_im_roster_update_from_item_messages (XmppIM_Roster *r, Ecore_List * list);
+
+
+/**
+ * Create a group inside the roster
+ * @param groupname: The groupname to add
+ * @return the Newly created group
  */
 XmppIM_RosterGroup * xmpp_im_roster_group_new (char * groupname);
 

@@ -79,6 +79,9 @@ int test_all (int argc, char ** argv) {
   Xmpp * xm = xmpp_register (eg);
   XmppIM * xmppim = xmpp_im_register (eg);
 
+  /* display the egxp structure */
+  egxp_display(eg);
+
   /* after 3 second we quit the ecore loop */
   Ecore_Timer * timer = ecore_timer_add (15, timer_cb, NULL);
   printf("Quit automaticly (after 15 seconds)\n");

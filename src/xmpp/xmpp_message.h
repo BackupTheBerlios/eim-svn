@@ -34,7 +34,7 @@ int xmpp_message_stream (Xmpp * x);
 /**
  * This function is an helper function to 
  * build preconfigured iq message.
- * @param type: "set" or "get" must not be null
+ * @param type: "set", "get" or "result" must not be null
  * @param id: "id of the query" must not be null
  * @param to: "the destination"
  * @return the build message

@@ -37,7 +37,7 @@ Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource) {
   
   tmp->user = strdup (user);
   tmp->host = strdup (host);
-  tmp->resource = strdup (resource);
+  tmp->resource = resource?strdup (resource):NULL;
 
   return tmp;
 }
@@ -56,6 +56,38 @@ void xmpp_jid_free (Xmpp_JID * jid) {
   FREE (jid);
 }
 
+Xmpp_JID * xmpp_jid_new_from_bare (char * jidbar) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_jid_new_from_bar\n");
+#endif 
+  assert (jidbar);
+  Xmpp_JID * tmp = XMPP_JID(malloc (sizeof(Xmpp_JID)));
+
+  /* split the jidbare in two parts */
+  char * at = strchr (jidbar, '@');
+  char * slash = strchr (jidbar, '/');
+
+  /* check if there is a name */
+  if (at != NULL) {
+    tmp->user = strndup ((const char*)jidbar, (size_t) (((int)at) - ((int)jidbar)) / sizeof (char));
+    at = (at+1);
+  } else {
+    tmp->user = strdup("");
+    at = jidbar;
+  }
+
+  /* set the host */
+  if (slash == NULL) {
+    tmp->host = strdup ((char*) at);
+    tmp->resource = strdup ("");
+  } else {
+    /* set the host */
+    tmp->host = strndup ((const char*) at, (size_t) (((int)slash) - ((int)at)) / sizeof(char));
+    tmp->resource = strdup((const char*) (slash + 1));
+  }
+
+  return tmp;
+}
 
 char * xmpp_jid_get_bar (Xmpp_JID * jid) {
 #ifdef XMPP_DEBUG

@@ -11,4 +11,12 @@
  */
 void xmpp_im_callback_roster_init(Egxp_Message * msg, void* data);
 
+
+/**
+ * This callback is called when the request roster has been accepted.
+ * So this method try to populate the roster.
+ * @param msg: a message with the request acceptation
+ * @param data: the egxp structure
+ */
+void xmpp_im_callback_roster_populate(Egxp_Message * msg, void* data);
 #endif

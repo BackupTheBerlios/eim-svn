@@ -8,6 +8,8 @@
 
 #define XMPPIM_REGISTER "__XMPPIM_REGISTER__"
 
+#define XMPPIM_GET(_eg) \
+       XMPPIM(egxp_extension_get_from_string (_eg, XMPPIM_REGISTER))
 
 /**
  * Should register the xmpp_im extension

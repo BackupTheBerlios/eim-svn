@@ -83,7 +83,11 @@ void egxp_node_add_condition (Egxp_Node * cn, Egxp_Condition * cond) {
 #endif
   
   assert (cn && cond);
-  
+   
+  /* check if the node is already attached to a parent. If it is already 
+     attached we generate an error */
+  assert (cn->parent == NULL);
+
   /* check if the conditions lists is created */
   if (cn->conditions == NULL) {
     cn->conditions = ecore_list_new ();
@@ -178,4 +182,23 @@ Egxp_Node * egxp_node_get_child (Egxp_Node * node, int id) {
 
   /* go to the first node */
   return ecore_dlist_goto_last(ltmp);
+}
+
+
+void __print_childs (void * node, void * user_data) {
+  Ecore_DList * list = ECORE_DLIST (ECORE_HASH_NODE(node)->value);
+  ecore_dlist_for_each (list, ECORE_FOR_EACH (egxp_node_print), user_data);
+  //egxp_node_print (value, EGXP_OPCODE (user_data));
+}
+
+
+void egxp_node_print (Egxp_Node * n, Egxp_Opcode * op) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_node_print\n");
+#endif
+  assert (n && op);
+  printf("Tag name: %s -- CB begin: %p -- CB end: %p\n", egxp_opcode_get_string(op, n->tag), n->begin_cb, n->end_cb);
+  
+  if (n->conditions) ecore_list_for_each (n->conditions, ECORE_FOR_EACH (egxp_condition_print), op);
+  if (n->childs) ecore_hash_for_each_node (n->childs, ECORE_FOR_EACH (__print_childs), op);
 }

@@ -26,6 +26,7 @@
 #include "xmpp_auth.h"
 #include "xmpp_opcode.h"
 
+
 void xmpp_opcode_init (Egxp * eg) {
 #ifdef XMPP_DEBUG
   printf("TRACE: xmpp_opcode_init\n");
@@ -43,6 +44,7 @@ void xmpp_opcode_init (Egxp * eg) {
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS);
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS_STREAM);
   
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_XMLNS);
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_XMLNS_STREAM);
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_VERSION);
   
@@ -88,8 +90,6 @@ void xmpp_opcode_init (Egxp * eg) {
   /********************/
   /* define stream */
   Egxp_Node * stream = egxp_node_new (egxp_opcode_get_id (eg->opcodes, XMPP_TAG_STREAM));
-  egxp_node_add_child (eg->root, stream);
-  
   egxp_node_add_condition (stream, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_XMLNS),
 						       egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_STREAM_XMLNS)));
   
@@ -97,17 +97,28 @@ void xmpp_opcode_init (Egxp * eg) {
 						       egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_STREAM_XMLNS_STREAM)));
   
   egxp_node_set_cb (stream, xmpp_callback_stream_begin_cb, NULL);
+  egxp_node_add_child (eg->root, stream);
 
-
-  /* maybe put this inside the xmpp_auth */
+  /*************************************************************************************/
   /* define iq type='result' id='auth_1' */
-  Egxp_Node * iq = egxp_node_new (egxp_opcode_get_id (eg->opcodes, XMPP_TAG_IQ));
-  egxp_node_add_child (stream, iq);
-  /* type = result */
-  egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_TYPE),
-						   egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_IQ_RESULT)));
-  egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_ID),
-						   egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_IQ_AUTH_1)));
-  /* attach callback */
+  /*************************************************************************************/  
+  Egxp_Node * iq = xmpp_opcode_iq (eg->opcodes, XMPP_VALUE_IQ_RESULT, XMPP_VALUE_IQ_AUTH_1);
   egxp_node_set_cb (iq, NULL, xmpp_auth_auth_1_cb);
+  egxp_node_add_child (stream, iq);
+}
+
+
+
+Egxp_Node * xmpp_opcode_iq (Egxp_Opcode * opcodes, char * type, char * id) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_opcode_iq\n");
+#endif 
+  assert (opcodes);
+
+  Egxp_Node * iq = egxp_node_new (egxp_opcode_get_id (opcodes, XMPP_TAG_IQ));
+  egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (opcodes, XMPP_ATT_TYPE),
+						       egxp_opcode_get_id (opcodes, type)));
+  if(id) egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (opcodes, XMPP_ATT_ID),
+						       egxp_opcode_get_id (opcodes, id)));
+  return iq;
 }

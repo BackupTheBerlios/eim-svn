@@ -20,8 +20,8 @@ int xmpp_presence_send (Xmpp *x, int show) {
   Egxp_Opcode * opcodes = EGXP_EXTENSION (x)->parent->opcodes;
   assert (opcodes);
   /* append the show value */
-  char * data = egxp_opcode_get_string (opcodes,show);
-  egxp_message_append_data (show_msg, data, strlen (data));
+  const char * data = egxp_opcode_get_string (opcodes, show);
+  egxp_message_append_data (show_msg, (char*)data, strlen (data));
   egxp_message_add_child (message, show_msg);
 
   /* send the message */

@@ -22,7 +22,7 @@
 #define egxp_node_header_h_
 
 #include "egxp_node_struct.h"
-
+#include "egxp_opcode.h"
 /****************************************************************/
 /****************************************************************/
 /****************************************************************/
@@ -75,5 +75,11 @@ void egxp_node_add_child (Egxp_Node * parent, Egxp_Node * child);
  * @return a child or null.
  */
 Egxp_Node * egxp_node_get_child (Egxp_Node * node, int id);
+
+
+/**
+ * Display to standard output the contains of the Egxp Node sturcture
+ */
+void egxp_node_print (Egxp_Node * n, Egxp_Opcode * op);
 
 #endif

@@ -42,6 +42,13 @@ struct _Xmpp_JID {
  */
 Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource);
 
+/**
+ * Create a new jid from a bar representation
+ * @param bar: the bar representation
+ * @return the newly created jid
+ */ 
+Xmpp_JID * xmpp_jid_new_from_bar (char * jidbar);
+
 
 /**
  * Free the structure
@@ -54,7 +61,7 @@ void xmpp_jid_free (Xmpp_JID * jid);
  * @param jid: The jid used to get the bar jid
  * @return the jid bare, you should free the memory
  */
-char * xmpp_jid_get_bar (Xmpp_JID * jid);
+char * xmpp_jid_get_bare (Xmpp_JID * jid);
 
 
 /**
