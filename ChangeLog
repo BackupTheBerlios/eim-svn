@@ -1,3 +1,9 @@
+2005-03/31(jol):
+	- Fix a dirty bug inside the get_data of the egxp_message
+	- Fix a bug in the roster, in fact, all contacts were referenced by their
+	  name instead of their jid.
+	- It seems to have no memory leak
+	
 2005-03-30(jol):
 	- fix a bug in the xmpp_jid code,
 	- the bug hunting progress ...

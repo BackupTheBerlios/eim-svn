@@ -27,9 +27,16 @@
 #include "xmpp_im_roster.h"
 #include "xmpp_im_contact.h"
 
+
+/* use for debug */
+static int _contact_num = 0;
+
+
+
 XmppIM_Contact * xmpp_im_contact_new (Xmpp_JID * jid, char * name) {
 #ifdef XMPPIM_DEBUG
-  printf("TRACE:xmpp_im_contact_new\n");
+  _contact_num += 1;
+  printf("TRACE:xmpp_im_contact_new %d - %s\n", _contact_num, name);
 #endif
   assert (jid);
 
@@ -47,10 +54,11 @@ XmppIM_Contact * xmpp_im_contact_new (Xmpp_JID * jid, char * name) {
 
 
 void xmpp_im_contact_free (XmppIM_Contact * contact) {
-#ifdef XMPPIM_DEBUG
-  printf("TRACE:xmpp_im_contact_free\n");
-#endif
   assert( contact != NULL);
+#ifdef XMPPIM_DEBUG
+  _contact_num -=1;
+  printf("TRACE:xmpp_im_contact_free: %d - %s\n", _contact_num, contact->name);
+#endif
 
   /* unregister the contact from his group list */
   xmpp_im_contact_remove_all_group (contact);

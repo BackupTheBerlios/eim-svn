@@ -217,7 +217,8 @@ char * egxp_message_get_data (Egxp_Message *m) {
   
   char * buf = (char*) malloc ((m->data_size + 1) * sizeof (char));
   strncpy (buf, m->data, m->data_size);
-  
+  buf[m->data_size] = '\0';
+
   return buf;
 }
 

@@ -21,6 +21,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "xmpp/xmpp_jid.h"
+
 #include "xmpp_im_contact.h"
 #include "xmpp_im_roster.h"
 
@@ -44,6 +47,8 @@ XmppIM_Roster * xmpp_im_roster_new () {
 			       ecore_str_compare);
   ecore_hash_set_free_value (tmp->users, 
 			     (Ecore_Free_Cb)xmpp_im_contact_free);
+  ecore_hash_set_free_key (tmp->users,
+			   (Ecore_Free_Cb) free);
   
   return tmp;
 }
@@ -87,7 +92,11 @@ void xmpp_im_roster_add_contact (XmppIM_Roster * r, XmppIM_Contact * c) {
 
   assert (r != NULL && r->users != NULL && c != NULL);
   
-  ecore_hash_set (r->users, c->name, c);
+  /**
+   * We add the contact using it's jid.
+   * The jid must be deleted when the contact is removed
+   */
+  ecore_hash_set (r->users, xmpp_jid_get_bar (c->jid), c);
 }
 
 
@@ -102,8 +111,12 @@ void xmpp_im_roster_remove_contact (XmppIM_Roster * r, XmppIM_Contact * c) {
   xmpp_im_contact_remove_all_group (c);
   
   /* remove the contact from the user hash */
-  XmppIM_Contact * tmp = XMPPIM_CONTACT (ecore_hash_remove (r->users, c->name));
+  char * jid = xmpp_jid_get_bar (c->jid);
+  XmppIM_Contact * tmp = XMPPIM_CONTACT (ecore_hash_remove (r->users, jid));
+  FREE (jid);
   
+  
+
   assert (tmp == c);
 }
 
@@ -149,9 +162,16 @@ XmppIM_RosterGroup * xmpp_im_roster_add_contact_to_group (XmppIM_Roster *r, Xmpp
 
 
 
+
+/* use to debug */
+static int _roster_group_num = 0;
+
+
+
 XmppIM_RosterGroup * xmpp_im_roster_group_new (char * groupname) {
 #ifdef XMPPIM_DEBUG
-  printf("TRACE: xmpp_im_roster_group_new\n");
+  _roster_group_num += 1;
+  printf("TRACE: xmpp_im_roster_group_new: %d\n", _roster_group_num);
 #endif
   
   XmppIM_RosterGroup * tmp = XMPPIM_ROSTERGROUP(malloc (sizeof (XmppIM_RosterGroup)));
@@ -167,7 +187,8 @@ XmppIM_RosterGroup * xmpp_im_roster_group_new (char * groupname) {
 
 void xmpp_im_roster_group_free (XmppIM_RosterGroup * r) {
 #ifdef XMPPIM_DEBUG
-  printf("TRACE: xmpp_im_roster_group_free\n");
+  _roster_group_num -= 1;
+  printf("TRACE: xmpp_im_roster_group_free: %d\n", _roster_group_num);
 #endif
 
   /* free the group name */
