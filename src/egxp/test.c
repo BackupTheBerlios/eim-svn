@@ -32,7 +32,7 @@ int main (int argc, char ** argv) {
   /* add the iq part as example */
   n1 = egxp_node_new (egxp_opcode_get_id (ph->opcodes, "iq"));
   egxp_node_add_child_node (ph->root, n1);
-  egxp_node_set_cb (n11, NULL, NULL);
+  egxp_node_set_cb (n1, NULL, NULL);
 
   /* add iq type = get */
   c1 = egxp_conditional_node_new_with_condition (n1, egxp_condition_new (egxp_opcode_get_id (ph->opcodes, "type"),

@@ -45,5 +45,5 @@ void egxp_child_node_add_node (Egxp_ChildNode * cn, Egxp_Node * c) {
   }
   
   /* so now we can add it */
-  ecore_hash_set (cn->childs, c->tag, c);
+  ecore_hash_set (cn->childs, &c->tag, c);
 }
