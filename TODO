@@ -1,3 +1,7 @@
-- Change the Egxp_ChildNode to Egxp_BaseNode
-- Egxp_Node must inherit from Egxp_BaseNode
+HIGH URGENCY
+- implement egxp_protocol_handler_end_element
+- implement egxp_protocol_handler_char_data
+- implement the receive callback to give data to the XML Parser
+
+LOW URGENCY
 - Should change the egxp_message to handle integer tag instead of char * tag.
