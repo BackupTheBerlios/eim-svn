@@ -152,9 +152,9 @@ const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name) {
 }
 
 
-void egxp_opcode_display (Egxp_Opcode * op) {
+void egxp_opcode_print (Egxp_Opcode * op) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_opcode_display\n");
+  printf("TRACE: egxp_opcode_print\n");
 #endif
   int i;
   assert (op);

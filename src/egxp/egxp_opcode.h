@@ -93,8 +93,9 @@ const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name);
 
 
 /**
- * Display the contents of grammar
+ * Display all registered opcodes
+ * @param p: the opcode to print
  */
-void egxp_opcode_display (Egxp_Opcode * op);
+void egxp_opcode_print(Egxp_Opcode * op);
 
 #endif
