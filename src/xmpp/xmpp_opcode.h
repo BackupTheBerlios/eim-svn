@@ -52,8 +52,13 @@
 
 #define XMPP_VALUE_IQ_GET       "get"
 #define XMPP_VALUE_IQ_SET       "set"
+#define XMPP_VALUE_IQ_RESULT    "result"
 
 #define XMPP_VALUE_QUERY_AUTH   "jabber:iq:auth"
+
+#define XMPP_VALUE_IQ_AUTH_1    "auth_1"
+#define XMPP_VALUE_IQ_AUTH_2    "auth_2"
+
 
 /**
  * Add the xmpp opcode inside the opcode variable

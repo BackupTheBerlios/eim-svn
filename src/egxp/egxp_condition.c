@@ -20,6 +20,8 @@
 */
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <Ecore_Data.h>
 
 #include "egxp_condition.h"
 
@@ -40,7 +42,7 @@ void egxp_condition_free (Egxp_Condition * condition) {
 
   assert (condition != NULL);
   
-  free (condition);
+  FREE (condition);
 }
 
 

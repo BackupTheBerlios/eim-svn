@@ -3,6 +3,15 @@
 
 #include "egxp.h"
 
+#define OP_1 "op1"
+#define OP_2 "op2"
+
+
+void test_opcode (Egxp_Opcode * opcodes) {
+  egxp_opcode_add (opcodes, OP_1);
+  egxp_opcode_add (opcodes, OP_2);
+}
+
 
 
 int main (int argc, char ** argv) {
@@ -10,7 +19,6 @@ int main (int argc, char ** argv) {
   Egxp * eg = egxp_new ();
   Egxp_Node * n1 = NULL;
   Egxp_Node * n2 = NULL;
-  Egxp_Node * n3 = NULL;
   
   /******************************************************/
   /******************************************************/
@@ -18,6 +26,7 @@ int main (int argc, char ** argv) {
   /******************************************************/
   /******************************************************/
   
+  test_opcode (eg->opcodes);
 
   /* define basics grammar */
   egxp_opcode_add (eg->opcodes, "stream");
@@ -72,21 +81,27 @@ int main (int argc, char ** argv) {
   /* test if it's possible to get the node from the egxp protocol handler */
   n1 = egxp_protocol_handler_get_node (eg->protocol_handler->protocol_stack,
                                        mesg1, eg->opcodes);
-  printf("Get stream node from protocol handler(it should not be null): %X\n", n1); 
+  printf("Get stream node from protocol handler(it should not be null): %p\n", n1); 
+  
+  
+  eg->protocol_handler->current_msg = mesg1;
   
   /* free the message */
-  egxp_message_free (mesg1);
+  //  egxp_message_free (mesg1);
   
   
 
   /* create a iq message with one attributes */
-  mesg1 = egxp_message_new ("iq");
-  egxp_message_add_attribute (mesg1, egxp_message_attribute_new ("type", "get"));
+  Egxp_Message * mesg2 = egxp_message_new ("iq");
+  egxp_message_add_attribute (mesg2, egxp_message_attribute_new ("type", "get"));
   /* test if it's possible to get the node from the egxp protocol handler */
-  printf("Get iq node from protocol handler(it should not be null): %X\n",
-         egxp_protocol_handler_get_node (n1, mesg1, eg->opcodes));
+  printf("Get iq node from protocol handler(it should not be null): %p\n",
+         egxp_protocol_handler_get_node (n1, mesg2, eg->opcodes));
+  
+  egxp_message_add_child (mesg1, mesg2);
+
   /* free the message */
-  egxp_message_free (mesg1);
+  // egxp_message_free (mesg1);
   
   
   /* free opcode */

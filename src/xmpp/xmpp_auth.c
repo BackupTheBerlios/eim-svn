@@ -12,8 +12,10 @@ Xmpp_Auth * xmpp_auth_new () {
   printf("TRACE: xmpp_auth_new\n");
 #endif
 
+  /* initialize the structure */
   Xmpp_Auth * auth = XMPP_AUTH(malloc (sizeof(Xmpp_Auth)));
   
+  /* initialize data */
   auth->password = NULL;
   auth->stream_id = NULL;
   
@@ -27,8 +29,11 @@ void xmpp_auth_free (Xmpp_Auth * a) {
 #endif
   assert (a);
   
+  /* free password && stream_id */
   IF_FREE(a->password);
   IF_FREE(a->stream_id);
+  
+  /* free structure */
   FREE(a);
 }
 

@@ -84,7 +84,7 @@ void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph) {
 
 void egxp_protocol_handler_start_element(void *userData, const char *name, const char **atts) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_protocol_handler_start_element\n");
+  printf("TRACE: egxp_protocol_handler_start_element : %s\n", name);
 #endif
   assert (userData && name);
   
@@ -92,7 +92,6 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
   Egxp * eg = EGXP (userData);
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   int i;
-  char use_callback = 0;
   Egxp_Node * node = NULL;
 
   assert (eg && ph);
@@ -131,17 +130,26 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
 
 void egxp_protocol_handler_end_element(void *userData, const char *name) {
 #ifdef EGXP_DEBUG
-  printf("TRACE: egxp_protocol_handler_end_element\n");
+  printf("TRACE: egxp_protocol_handler_end_element : %s\n", name);
 #endif
   assert (userData && name);
-
+  
   Egxp * eg = EGXP (userData);
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   
   assert (eg && ph);
   
+  assert (ph->current_msg);
+  
+  egxp_message_print(ph->current_msg);
+  
   /* check if the current message is equal to the current protocol stack node */
   if (egxp_protocol_handler_equals (ph->protocol_stack, ph->current_msg, eg->opcodes)) {
+    
+#ifdef EGXP_DEBUG
+    printf("TRACE: egxp_protocol_handler_end_element -> matches opcode : %s\n", name);
+#endif   
+    
     /* if equals we can call the callback associated to the end and update the protocol_stack */
     if (ph->protocol_stack->end_cb != NULL) ph->protocol_stack->end_cb (ph->current_msg, eg);
     
@@ -151,10 +159,18 @@ void egxp_protocol_handler_end_element(void *userData, const char *name) {
     /* go to the parent message and destroy the current message */
     Egxp_Message * old = ph->current_msg;
     ph->current_msg = old->parent;
+    if (ph->current_msg) egxp_message_remove_child (ph->current_msg, old);
     egxp_message_free (old);
+    
   } else {
+
+#ifdef EGXP_DEBUG
+    printf("TRACE: egxp_protocol_handler_end_element -> NOT matches opcode : %s\n", name);
+#endif   
     ph->current_msg = ph->current_msg->parent;
   }
+  
+  assert (ph->current_msg);
 }
 
 
@@ -255,7 +271,7 @@ Egxp_Node * egxp_protocol_handler_get_node (Egxp_Node * node, Egxp_Message * mes
 
 
 int egxp_protocol_handler_receive_server_cb (void *data, int type, Ecore_Con_Event_Server_Data *ev) {
-#ifdef EJAB_DEBUG
+#ifdef EGXP_DEBUG
   printf("TRACE: egxp_protocol_handler_receive_server_cb\n");
 #endif
   
@@ -265,7 +281,11 @@ int egxp_protocol_handler_receive_server_cb (void *data, int type, Ecore_Con_Eve
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   XML_Parser parser =  ph->parser;
   
-  printf("Got server data %X [%d] (%s)\n", ev->server, ev->size, (char *)ev->data);
+  char * tmp_buf = (char*) malloc ((ev->size +1) * sizeof (char));
+  tmp_buf[ev->size] = '\0';
+  strncpy (tmp_buf, (char*)ev->data, ev->size); 
+  printf("Got server data %p [%d] (%s)\n", ev->server, ev->size, tmp_buf);
+  free (tmp_buf);
   
   if (XML_Parse(parser, (char*) ev->data, ev->size, 0) == XML_STATUS_ERROR) {
     fprintf(stderr, "%s at line %d\n",

@@ -19,6 +19,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -32,6 +33,10 @@ typedef void (*Handler_Func) (void *data);
 /*****************************************************************************/
 
 Egxp_Message * egxp_message_new (char * tag_name) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_new\n");
+#endif
+  
   Egxp_Message * tmp = (Egxp_Message*) malloc (sizeof (Egxp_Message));
   
   /* copy the tag name */
@@ -54,7 +59,11 @@ Egxp_Message * egxp_message_new (char * tag_name) {
 
 
 void egxp_message_free (Egxp_Message * m) {
-  if (m == NULL) return;
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_free\n");
+#endif
+  
+  assert (m);
   
   FREE (m->tagname);
   ecore_list_destroy (m->attributes);
@@ -62,13 +71,17 @@ void egxp_message_free (Egxp_Message * m) {
   
   /* if attached to a parent, we remove the dependancies */
   if (m->parent) {
-    egxp_message_remove_child (m->parent, m);
+    // egxp_message_remove_child (m->parent, m);
   }
-  
+  IF_FREE (m->data);
   FREE (m);
 }
 
 Egxp_Message * egxp_message_get_child (Egxp_Message *m, char * tagname) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_get_child\n");
+#endif
+
   assert (m != NULL && tagname != NULL);
 
   ecore_list_goto_first(m->childs);
@@ -82,6 +95,10 @@ Egxp_Message * egxp_message_get_child (Egxp_Message *m, char * tagname) {
 }
 
 Ecore_List * egxp_message_get_childs (Egxp_Message *m, char * tagname) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_get_childs\n");
+#endif
+
   assert (m != NULL && tagname != NULL);
 
   Ecore_List * result = ecore_list_new ();
@@ -98,6 +115,10 @@ Ecore_List * egxp_message_get_childs (Egxp_Message *m, char * tagname) {
 
 
 void egxp_message_add_attribute (Egxp_Message *m, Egxp_MessageAttribute * ma) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_add_attribute\n");
+#endif
+  
   if (m == NULL) return;
   
   ecore_list_append (m->attributes, ma);
@@ -105,6 +126,10 @@ void egxp_message_add_attribute (Egxp_Message *m, Egxp_MessageAttribute * ma) {
 
 
 char * egxp_message_get_attribute (Egxp_Message *m, char * key) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_get_attribute\n");
+#endif
+
   assert (m != NULL && key != NULL);
   
   ecore_list_goto_first(m->attributes);
@@ -117,6 +142,10 @@ char * egxp_message_get_attribute (Egxp_Message *m, char * key) {
 }
 
 void egxp_message_add_child (Egxp_Message *m, Egxp_Message * ma) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_add_child\n");
+#endif
+  
   if (m == NULL || ma == NULL) return;
   
   ecore_list_append (m->childs, ma);
@@ -124,6 +153,10 @@ void egxp_message_add_child (Egxp_Message *m, Egxp_Message * ma) {
 }
 
 void egxp_message_remove_child (Egxp_Message *m, Egxp_Message * ma) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_remove_child\n");
+#endif
+
   assert (m != NULL && ma != NULL);
 
   ecore_list_goto_first(m->childs);
@@ -138,6 +171,10 @@ void egxp_message_remove_child (Egxp_Message *m, Egxp_Message * ma) {
 
 
 void egxp_message_append_data (Egxp_Message *m, char * data, unsigned int size) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_append_data\n");
+#endif
+
   assert (m!= NULL);
 
   // i think we can just use realloc ... but i'm not sure about strcat 
@@ -158,16 +195,27 @@ void egxp_message_append_data (Egxp_Message *m, char * data, unsigned int size) 
 
 
 char * egxp_message_get_data (Egxp_Message *m) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_get_data\n");
+#endif
+
   assert (m != NULL);
   
   /* if there is no data we return NULL */
   if (m->data == NULL) return NULL;
   
-  return (char*)strndup (m->data, m->data_size);
+  char * buf = (char*) malloc ((m->data_size + 1) * sizeof (char));
+  strncpy (buf, m->data, m->data_size);
+  
+  return buf;
 }
 
 
 char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_to_xml\n");
+#endif
+
   int buf_len, len;
   char * buf;
 
@@ -251,6 +299,9 @@ char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
 }
 
 void egxp_message_print(Egxp_Message *m) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_print\n");
+#endif
   if (m == NULL) return;
   char * buf = egxp_message_to_xml (m, 1);
   printf("%s\n", buf);
@@ -259,12 +310,18 @@ void egxp_message_print(Egxp_Message *m) {
 
 
 unsigned int egxp_message_is_empty (Egxp_Message *m) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_is_empty\n");
+#endif
   assert (m != NULL);
   return (ecore_list_is_empty (m->childs) && m->data == NULL);
 }
 
 
 Egxp_MessageAttribute * egxp_message_attribute_new (char * key, char * value) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_attribute_new\n");
+#endif
   Egxp_MessageAttribute * tmp = (Egxp_MessageAttribute *) malloc (sizeof (Egxp_MessageAttribute));
   
   tmp->key = strdup (key);
@@ -274,6 +331,10 @@ Egxp_MessageAttribute * egxp_message_attribute_new (char * key, char * value) {
 }
 
 void egxp_message_attribute_free (Egxp_MessageAttribute * ma) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_attribute_free\n");
+#endif
+
   if (ma == NULL) return;
   
   FREE (ma->key);

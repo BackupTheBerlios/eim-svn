@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "egxp_opcode.h"
 
@@ -52,11 +53,11 @@ void egxp_opcode_free (Egxp_Opcode * op) {
   assert (op);
   
   /* free only the initial pointer */
-  free (op->id_string);
+  IF_FREE (op->id_string);
 
   // static string, so it's forbidden to destroy if (op->id_string) free (op->id_string);
   ecore_hash_destroy (op->string_id);
-  free (op);
+  FREE (op);
 }
 
 
@@ -71,6 +72,10 @@ int egxp_opcode_add (Egxp_Opcode * op, const char * name) {
   int * id = (int*) malloc (sizeof (int));
   *id = op->id++;
   
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_opcode_add -> %s %d\n", name, *id);
+#endif 
+
   /* add the new element */
   ecore_hash_set (op->string_id, (char*)name, id);
 
@@ -130,7 +135,7 @@ const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name) {
 
   int * tmp = ecore_hash_get (op->string_id, (char*)name);
   if (!tmp) {
-    printf("ERROR: unknown opcode %s.\n"); 
+    printf("ERROR: unknown opcode %s.\n", name); 
     return -1;
   }
   

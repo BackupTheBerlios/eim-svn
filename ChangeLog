@@ -1,3 +1,6 @@
+2005-02-18(jol):
+	- Try to fix some memory leaks
+	
 2005-02-15(jol):
 	- now it's possible to connect to a server
 	- add the xmpp_auth file which should handle authentification process

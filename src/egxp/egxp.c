@@ -84,7 +84,8 @@ void egxp_extension_free (void * e) {
   printf("TRACE: egxp_extension_free\n");
 #endif
   assert (e);
-  
+
+  /* call the destroy function of the register */
   Egxp_Extension * ext = EGXP_EXTENSION(e);
   ext->destroy (e);
 }

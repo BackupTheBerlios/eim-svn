@@ -9,6 +9,7 @@
 
 int timer_cb (void * user_data) {
   ecore_main_loop_quit ();
+  return 1;
 }
 
 int main (int argc, char ** argv) {
@@ -45,9 +46,11 @@ int main (int argc, char ** argv) {
   /* define the jid */
   xm->jid = xmpp_jid_new (argv[1], argv[2], "eim");
   
+  egxp_opcode_display (eg->opcodes);
+
   /* now we can send a message to the server */
   xmpp_message_stream (xm);
-  
+
   /* ecore loop */
   ecore_main_loop_begin();
   /* shutdown */

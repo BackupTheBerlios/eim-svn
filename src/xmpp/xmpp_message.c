@@ -56,6 +56,8 @@ int xmpp_message_stream (Xmpp * x) {
   /* get reference to the connection */
   Egxp_Connection * conn = EGXP_EXTENSION(x)->parent->connection;
   egxp_connection_send_message (conn, message, 0);
+
+  return 1;
 }
 
 Egxp_Message * xmpp_message_iq (char * type, char * id, char * to) {
@@ -81,7 +83,14 @@ Egxp_Message * xmpp_message_iq (char * type, char * id, char * to) {
 
 
 Egxp_Message * xmpp_message_query (char * xmlns) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_message_query\n");
+#endif 
+  assert (xmlns);
+  
+  /* build the query message */
   Egxp_Message * message = egxp_message_new (XMPP_TAG_QUERY);
+  /* set the xmlns attribute */
   egxp_message_add_attribute (message, 
 			      egxp_message_attribute_new (XMPP_ATT_XMLNS, 
 							  xmlns));

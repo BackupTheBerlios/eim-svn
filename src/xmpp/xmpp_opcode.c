@@ -36,6 +36,8 @@ void xmpp_opcode_init (Egxp * eg) {
   /* *************** */
   /*     stream      */
   egxp_opcode_add (eg->opcodes, XMPP_TAG_STREAM);
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_IQ);
+  egxp_opcode_add (eg->opcodes, XMPP_TAG_QUERY);
   
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS);
   egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS_STREAM);
@@ -45,7 +47,29 @@ void xmpp_opcode_init (Egxp * eg) {
   egxp_opcode_add (eg->opcodes, XMPP_VALUE_STREAM_VERSION);
   
   
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_TYPE);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_TO);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_XMLNS);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_VERSION);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_ID);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_JID);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_FROM);
+  egxp_opcode_add (eg->opcodes, XMPP_ATT_NAME);
+
   
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_GET);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_SET);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_RESULT);
+  
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_QUERY_AUTH);
+  
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_AUTH_1);
+  egxp_opcode_add (eg->opcodes, XMPP_VALUE_IQ_AUTH_2);
+
+  // egxp_opcode_add (eg->opcodes, );
+  
+  
+
   /********************/
   /********************/
   /*  Protocol Init   */
@@ -62,5 +86,18 @@ void xmpp_opcode_init (Egxp * eg) {
 						       egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_STREAM_XMLNS_STREAM)));
   
   egxp_node_set_cb (stream, xmpp_callback_stream_begin_cb, NULL);
+
+
+  /* maybe put this inside the xmpp_auth */
+  /* define iq type='result' id='auth_1' */
+  Egxp_Node * iq = egxp_node_new (egxp_opcode_get_id (eg->opcodes, XMPP_TAG_IQ));
+  egxp_node_add_child (stream, iq);
+  /* type = result */
+  egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_TYPE),
+						   egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_IQ_RESULT)));
+  egxp_node_add_condition (iq, egxp_condition_new (egxp_opcode_get_id (eg->opcodes, XMPP_ATT_ID),
+						   egxp_opcode_get_id (eg->opcodes, XMPP_VALUE_IQ_AUTH_1)));
+  /* attach callback */
   
+
 }
