@@ -3,7 +3,7 @@
 
 #include "egxp_condition.h"
 
-Egxp_Condition * egxp_condition_new (const unsigned int key, const unsigned int value) {
+Egxp_Condition * egxp_condition_new (const int key, const int value) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_condition_new\n");
 #endif

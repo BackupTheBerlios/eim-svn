@@ -37,7 +37,7 @@ void egxp_opcode_free (Egxp_Opcode * op) {
 }
 
 
-unsigned int egxp_opcode_add (Egxp_Opcode * op, const char * name) {
+int egxp_opcode_add (Egxp_Opcode * op, const char * name) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_opcode_add\n");
 #endif
@@ -45,7 +45,7 @@ unsigned int egxp_opcode_add (Egxp_Opcode * op, const char * name) {
   assert (op && name);
   
   /* allocate the memory for the id */
-  unsigned int * id = (unsigned int*) malloc (sizeof (unsigned int));
+  int * id = (int*) malloc (sizeof (int));
   *id = op->id++;
   
   /* add the new element */
@@ -85,7 +85,7 @@ void egxp_opcode_update (Egxp_Opcode * op) {
 }
 
 
-const char * egxp_opcode_get_string (Egxp_Opcode * op, const unsigned int id) {
+const char * egxp_opcode_get_string (Egxp_Opcode * op, const int id) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_opcode_get_string\n");
 #endif
@@ -99,13 +99,20 @@ const char * egxp_opcode_get_string (Egxp_Opcode * op, const unsigned int id) {
 }
 
 
-const unsigned int * egxp_opcode_get_id (const Egxp_Opcode *op, const char * name) {
+const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_opcode_get_id\n");
 #endif
   assert (op && name);
 
-  return ((int*)ecore_hash_get (op->string_id, (char*)name));
+  int * tmp = ecore_hash_get (op->string_id, (char*)name);
+  if (!tmp) {
+    printf("ERROR: opcode %s seems to has no id\n"); 
+    assert (0);
+    return -1;
+  }
+  
+  return *tmp;
 }
 
 

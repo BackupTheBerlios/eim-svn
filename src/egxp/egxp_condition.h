@@ -8,7 +8,7 @@
  * @param key: the id of the key
  * @param value: the id of the value
  */
-Egxp_Condition * egxp_condition_new (const unsigned int key, const unsigned int value); 
+Egxp_Condition * egxp_condition_new (const int key, const int value); 
 
 /**
  * Free the memory of the condition

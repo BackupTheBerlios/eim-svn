@@ -5,6 +5,7 @@
 #include <Ecore_Data.h>
 
 #include "egxp_child_node.h"
+#include "egxp_conditional_node.h"
 #include "egxp_node.h"
 
 Egxp_Node * egxp_node_new (const unsigned int tag) {
@@ -36,7 +37,7 @@ void egxp_node_free (Egxp_Node *n) {
 }
 
 
-void egxp_node_set_callback (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end) {
+void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_node_set_callback\n");
 #endif 
@@ -63,4 +64,19 @@ void egxp_node_add_child_node (Egxp_Node * parent, Egxp_Node * child) {
 
   /* add the node to the child element */
   egxp_child_node_add_node (parent->child, child);  
+}
+
+
+void egxp_node_add_conditional_node (Egxp_Node * parent, Egxp_ConditionalNode * child) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_node_add_conditional_node\n");
+#endif
+  assert (parent && child);
+
+  if (parent->conditions == NULL) {
+    parent->conditions = ecore_list_new ();
+    ecore_list_set_free_cb (parent->conditions, egxp_conditional_node_free);
+  }
+  
+  ecore_list_append (parent->conditions, child);
 }

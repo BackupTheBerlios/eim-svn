@@ -22,7 +22,7 @@ void egxp_node_free (Egxp_Node *n);
  * @param begin:
  * @param end:
  */
-void egxp_node_set_callback (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end);
+void egxp_node_set_cb (Egxp_Node * n, egxp_callback_ptr * begin, egxp_callback_ptr * end);
 
 
 /**
@@ -31,6 +31,14 @@ void egxp_node_set_callback (Egxp_Node * n, egxp_callback_ptr * begin, egxp_call
  * @param end: the child node
  */
 void egxp_node_add_child_node (Egxp_Node * parent, Egxp_Node * child);
+
+
+/**
+ * Add a Conditional node to the node
+ * @param parent: the parent node
+ * @param end: the child node
+ */
+void egxp_node_add_conditional_node (Egxp_Node * parent, Egxp_ConditionalNode * child);
 
 
 #endif

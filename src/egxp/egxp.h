@@ -7,7 +7,7 @@
 #include "egxp_opcode.h"
 #include "egxp_condition.h"
 #include "egxp_message.h"
-
+#include "egxp_conditional_node.h"
 
 typedef struct _Egxp Egxp;
 #define EGXP(o) ((Egxp*)o)

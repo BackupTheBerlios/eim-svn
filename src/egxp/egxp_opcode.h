@@ -42,7 +42,7 @@ void egxp_opcode_free (Egxp_Opcode * op);
  * @param name: The string representation
  * @return the newly created id.
  */
-unsigned int egxp_opcode_add (Egxp_Opcode * op, const char * name);
+int egxp_opcode_add (Egxp_Opcode * op, const char * name);
 
 
 /**
@@ -60,7 +60,7 @@ void egxp_opcode_update (Egxp_Opcode * op);
  * @param id: The id
  * @return: the string id
  */
-const char * egxp_opcode_get_string (Egxp_Opcode * op, const unsigned int id);
+const char * egxp_opcode_get_string (Egxp_Opcode * op, const int id);
 
 
 /**
@@ -69,7 +69,7 @@ const char * egxp_opcode_get_string (Egxp_Opcode * op, const unsigned int id);
  * @param id: The id
  * @return: the string id
  */
-const unsigned int * egxp_opcode_get_id (const Egxp_Opcode *op, const char * name);
+const int egxp_opcode_get_id (const Egxp_Opcode *op, const char * name);
 
 
 /**
