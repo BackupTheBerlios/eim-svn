@@ -1,3 +1,8 @@
+2005-03-03(jol):
+	- Fix a problem inside the xmpp_im_contact_remove_all_group.
+	- Add xmpp_jid_get_bar and xmpp_jid_get_full.
+	- Add GPL license within some files.
+	
 2005-02-28(jol):
 	- Just a first implementation of the Roster, Group and Contact
 	- Give an test example to check memory leak and the behavior of the new code

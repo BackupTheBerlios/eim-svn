@@ -25,7 +25,6 @@
  * Here we define the Jid structure and a set of function
  * to handle the jid
  */
-
 typedef struct _Xmpp_JID Xmpp_JID;
 #define XMPP_JID(o) ((Xmpp_JID*)o)
 struct _Xmpp_JID {
@@ -43,10 +42,26 @@ struct _Xmpp_JID {
  */
 Xmpp_JID * xmpp_jid_new (char * user, char * host, char * resource);
 
+
 /**
  * Free the structure
  */
 void xmpp_jid_free (Xmpp_JID * jid);
 
+
+/**
+ * Get the jid in the bare format
+ * @param jid: The jid used to get the bar jid
+ * @return the jid bare, you should free the memory
+ */
+char * xmpp_jid_get_bar (Xmpp_JID * jid);
+
+
+/**
+ * Get the jid in the full format
+ * @param jid: The jid used to get the full jid
+ * @return the full jid, you shoud free memory
+ */
+char * xmpp_jid_get_full (Xmpp_JID * jid);
 
 #endif
