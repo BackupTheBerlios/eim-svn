@@ -32,7 +32,7 @@ void egxp_protocol_handler_end_element(void *userData, const char *name);
 void egxp_protocol_handler_char_data (void *userData, const XML_Char *s, int len);
 
 
-Egxp_ProtocolHandler * egxp_protocol_handler_new (struct _Egxp * e) {
+Egxp_ProtocolHandler * egxp_protocol_handler_new (Egxp * e) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_protocol_handler_new\n");
 #endif 
@@ -45,16 +45,18 @@ Egxp_ProtocolHandler * egxp_protocol_handler_new (struct _Egxp * e) {
 
   /* initialize the xml parser */
   tmp->parser = XML_ParserCreate(NULL);
+  /* define the data pass as parameter during callback call. */
   XML_SetUserData(tmp->parser, e);
+  /* define callback */
   XML_SetElementHandler(tmp->parser, 
 			egxp_protocol_handler_start_element, 
 			egxp_protocol_handler_end_element);
   XML_SetCharacterDataHandler(tmp->parser,  egxp_protocol_handler_char_data);
-
+  
   /* initialize the protocol stack */
   tmp->protocol_stack = e->root;
   assert (tmp->protocol_stack != NULL);
-
+  
   return tmp;
 }
 
@@ -70,14 +72,12 @@ void egxp_protocol_handler_free (Egxp_ProtocolHandler * ph) {
 
   /* do we need to free the message ? */
   if (ph->current_msg) {
-    egxp_message_free (ph->current_msg);
+    /* free the root to be sure that we forget no message */
+    egxp_message_free (egxp_message_root (ph->current_msg));
+    ph->current_msg = NULL;
   }
-  
-  free (ph);
+  FREE (ph);
 }
-
-
-
 
 
 
@@ -115,6 +115,7 @@ void egxp_protocol_handler_start_element(void *userData, const char *name, const
   
   /* manage protocol */
   assert (ph->protocol_stack);
+  assert (ph->current_msg);
   
   /* try to get the Egxp_Node correspond to the tag id and parameter */
   node = egxp_protocol_handler_get_node (ph->protocol_stack, message, eg->opcodes);
@@ -138,10 +139,7 @@ void egxp_protocol_handler_end_element(void *userData, const char *name) {
   Egxp_ProtocolHandler * ph = eg->protocol_handler;
   
   assert (eg && ph);
-  
   assert (ph->current_msg);
-  
-  egxp_message_print(ph->current_msg);
   
   /* check if the current message is equal to the current protocol stack node */
   if (egxp_protocol_handler_equals (ph->protocol_stack, ph->current_msg, eg->opcodes)) {

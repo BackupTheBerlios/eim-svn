@@ -170,9 +170,18 @@ char * egxp_message_get_data (Egxp_Message *m);
  */
 char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag);
 
+/**
+ * Display the xml representation of the message
+ * @param m: The message to display
+ */
 void egxp_message_print(Egxp_Message *m);
 
-
+/**
+ * Return the root message.
+ * @param m: a message
+ * @return the root message or null if no message.
+ */
+Egxp_Message * egxp_message_root (Egxp_Message * m);
 
 
 

@@ -31,6 +31,8 @@
 #define XMPP_TAG_QUERY  "query"
 
 #define XMPP_TAG_USERNAME       "username"
+#define XMPP_TAG_PASSWORD       "digest"
+#define XMPP_TAG_RESOURCE       "resource"
 
 #define XMPP_ATT_XMLNS_STREAM   "xmlns:stream"
 

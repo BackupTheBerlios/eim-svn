@@ -110,7 +110,7 @@ void egxp_connection_disconnect (Egxp_Connection * c) {
   if (c->server) {
     /* warning FIXME, i don't how close connection work ... */
     printf("egxp_connection_disconnect:: FIXME %s\n", __FILE__);
-    // ecore_con_server_del (c->server);
+    ecore_con_server_del (c->server);
     c->server = NULL;
   }
 }

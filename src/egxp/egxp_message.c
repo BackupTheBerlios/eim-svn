@@ -59,11 +59,11 @@ Egxp_Message * egxp_message_new (char * tag_name) {
 
 
 void egxp_message_free (Egxp_Message * m) {
-#ifdef EGXP_DEBUG
-  printf("TRACE: egxp_message_free\n");
-#endif
-  
   assert (m);
+#ifdef EGXP_DEBUG
+  char * debug = strdup (m->tagname);
+  printf("TRACE: egxp_message_free -> begin: %s\n", debug);
+#endif
   
   FREE (m->tagname);
   ecore_list_destroy (m->attributes);
@@ -73,8 +73,15 @@ void egxp_message_free (Egxp_Message * m) {
   if (m->parent) {
     // egxp_message_remove_child (m->parent, m);
   }
-  IF_FREE (m->data);
+  m->parent = NULL;
+
+ IF_FREE (m->data);
   FREE (m);
+  
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_free -> end: %s\n", debug);
+  FREE (debug);
+#endif
 }
 
 Egxp_Message * egxp_message_get_child (Egxp_Message *m, char * tagname) {
@@ -161,7 +168,7 @@ void egxp_message_remove_child (Egxp_Message *m, Egxp_Message * ma) {
 
   ecore_list_goto_first(m->childs);
   Egxp_Message * list_item;
-  while((list_item = (Egxp_Message*)ecore_list_next(m->childs)) != NULL) {
+  while((list_item = EGXP_MESSAGE(ecore_list_next(m->childs))) != NULL) {
     if (ma == list_item) {
       ecore_list_remove (m->childs);
       return;
@@ -288,7 +295,7 @@ char * egxp_message_to_xml (Egxp_Message *m, unsigned int endtag) {
     // the termination tag
     if (endtag) {
       len = strlen (m->tagname);
-      buf_len += len + 3; // <tagname/>
+      buf_len += len + 3; // </tagname>
       buf = (char*) realloc (buf, buf_len);
       buf = strncat (buf, "</",2);
       buf = strncat (buf, m->tagname, len);
@@ -309,6 +316,20 @@ void egxp_message_print(Egxp_Message *m) {
 }
 
 
+Egxp_Message * egxp_message_root (Egxp_Message * m) {
+#ifdef EGXP_DEBUG
+  printf("TRACE: egxp_message_root\n");
+#endif
+  assert (m != NULL);
+  
+  /* if the parent is null we return this message */
+  if (m->parent == NULL) return m;
+  /* else we return the root of the parent */
+  return egxp_message_root (m->parent);
+}
+
+
+
 unsigned int egxp_message_is_empty (Egxp_Message *m) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_message_is_empty\n");
@@ -322,6 +343,8 @@ Egxp_MessageAttribute * egxp_message_attribute_new (char * key, char * value) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_message_attribute_new\n");
 #endif
+  assert (key && value);
+  
   Egxp_MessageAttribute * tmp = (Egxp_MessageAttribute *) malloc (sizeof (Egxp_MessageAttribute));
   
   tmp->key = strdup (key);
@@ -334,9 +357,9 @@ void egxp_message_attribute_free (Egxp_MessageAttribute * ma) {
 #ifdef EGXP_DEBUG
   printf("TRACE: egxp_message_attribute_free\n");
 #endif
-
-  if (ma == NULL) return;
   
+  assert (ma);
+
   FREE (ma->key);
   FREE (ma->value);
   FREE (ma);

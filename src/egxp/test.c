@@ -38,7 +38,6 @@ int main (int argc, char ** argv) {
   egxp_opcode_add (eg->opcodes, "set");
   
 
-  /* display information about opcode */
   egxp_opcode_print (eg->opcodes);
   
   
@@ -78,6 +77,10 @@ int main (int argc, char ** argv) {
   
   /* create a stream message without attribute */
   Egxp_Message * mesg1 = egxp_message_new ("stream");
+  egxp_message_add_attribute (mesg1, egxp_message_attribute_new ("fr", "sd"));
+  egxp_message_add_attribute (mesg1, egxp_message_attribute_new ("dfr", "sd"));
+  egxp_message_add_attribute (mesg1, egxp_message_attribute_new ("ffr", "sd"));
+  egxp_message_add_attribute (mesg1, egxp_message_attribute_new ("gfr", "sd"));
   /* test if it's possible to get the node from the egxp protocol handler */
   n1 = egxp_protocol_handler_get_node (eg->protocol_handler->protocol_stack,
                                        mesg1, eg->opcodes);
@@ -94,6 +97,9 @@ int main (int argc, char ** argv) {
   /* create a iq message with one attributes */
   Egxp_Message * mesg2 = egxp_message_new ("iq");
   egxp_message_add_attribute (mesg2, egxp_message_attribute_new ("type", "get"));
+  egxp_message_add_attribute (mesg2, egxp_message_attribute_new ("atype", "eget"));
+  egxp_message_add_attribute (mesg2, egxp_message_attribute_new ("ntype", "aget"));
+  egxp_message_add_attribute (mesg2, egxp_message_attribute_new ("dtype", "gfget"));
   /* test if it's possible to get the node from the egxp protocol handler */
   printf("Get iq node from protocol handler(it should not be null): %p\n",
          egxp_protocol_handler_get_node (n1, mesg2, eg->opcodes));
@@ -103,6 +109,12 @@ int main (int argc, char ** argv) {
   /* free the message */
   // egxp_message_free (mesg1);
   
+  int i;
+  for (i = 0; i < 1000 ; i++) {
+    char * buf = egxp_message_to_xml (mesg1, 1);
+    printf("%s\n%d\n", buf, strlen (buf));
+    free (buf);
+  }
   
   /* free opcode */
   egxp_free (eg);

@@ -33,8 +33,8 @@ int main (int argc, char ** argv) {
   Xmpp * xm = xmpp_register (eg);
   
   /* after 3 second we quit the ecore loop */
-  Ecore_Timer * timer = ecore_timer_add (5, timer_cb, NULL);
-  printf("Quit automaticly (after 5 seconds)\n");
+  Ecore_Timer * timer = ecore_timer_add (15, timer_cb, NULL);
+  printf("Quit automaticly (after 15 seconds)\n");
   
   /* define the connection */
   eg->connection = egxp_connection_new (argv[2], atoi (argv[3]), 0);
@@ -54,6 +54,8 @@ int main (int argc, char ** argv) {
   ecore_main_loop_begin();
   
   /* free Egxp */
+  egxp_message_print(eg->protocol_handler->current_msg);
+
   egxp_free (eg);
   
   /* shutdown */

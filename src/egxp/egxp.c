@@ -75,7 +75,7 @@ void egxp_free (Egxp * e) {
   if (e->connection) egxp_connection_free (e->connection);
   /* free extension */
   if (e->extensions) ecore_hash_destroy (e->extensions);
-  free (e);
+  FREE (e);
 }
 
 
