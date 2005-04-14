@@ -129,6 +129,9 @@ AC_SUBST(LIBEXPAT)
 
 AC_OUTPUT([
 Makefile
+data/Makefile
+data/themes/Makefile
+data/themes/default/Makefile
 src/Makefile
 src/egxp/Makefile
 src/xmpp/Makefile

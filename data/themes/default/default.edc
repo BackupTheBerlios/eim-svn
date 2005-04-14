@@ -1,0 +1,28 @@
+#include "macros/button.inc"
+
+
+images {
+  image, "arrow_b.png" RAW;
+  image, "arrow_t.png" RAW;
+}
+
+
+collections {
+
+  
+  // Define the main interface
+  group {
+    name : "eim";
+    min : 128 256;
+    
+    
+    parts {
+#include "parts/main.edc"
+      
+    }
+  
+    programs {
+#include "programs/main.edc"
+    }
+  }
+}

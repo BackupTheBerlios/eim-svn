@@ -1,0 +1,130 @@
+// Define the base background
+part {
+  name : "base.bg";
+  type : RECT;
+  mouse_events : 0;
+  
+  
+  description {
+    state : "default" 0.0;
+    color : 0 0 0 100;
+  }
+
+  description {
+    state : "close" 1.0;
+    color : 0 0 0 100;
+    
+    rel1 {
+      relative, 0.0 0.0;
+      offset, 0 0;
+    }
+
+    rel2 {
+      relative, 1.0 0.0;
+      offset, -1 30;
+    }
+  }
+}
+
+
+// Define Header
+part {
+  name, "base.header";
+  type, RECT;
+  mouse_events, 0;
+  
+  // define the background color of the header
+  description {
+    state, "default" 0.0;
+    color, 0 0 0 180;
+    
+    rel1 {
+      relative, 0.0 0.0;
+      offset, 0 0;
+      to, "base.bg";
+    }
+    
+    rel2 {
+      relative, 1.0 0.0;
+      offset, -1 10;
+      to, "base.bg";
+    }
+  }
+}
+
+
+// define the footer
+part {
+  name, "base.footer";
+  type, RECT;
+  mouse_events, 0;
+
+  // define the background color of the header
+  description {
+    state, "default" 0.0;
+    color, 0 0 0 180;
+        
+    rel1 {
+      relative, 0.0 1.0;
+      offset, 0 -10;
+      to, "base.bg";
+    }
+    rel2 {
+      relative, 1.0 1.0;
+      offset, -1 -1;
+      to, "base.bg";
+    }
+  }
+}
+
+
+
+// Define the Minus clip
+part {
+  name : "base.minus.clip";
+  type : RECT;
+  mouse_events : 0;
+  
+  description {
+    state : "default" 0.0;
+    visible : 1;
+  }
+  
+  description {
+    state : "close" 0.0;
+    visible : 0;
+  }
+}
+
+
+// Define the Plus clip
+part {
+  name : "base.plus.clip";
+  type : RECT;
+  mouse_events : 0;
+  description {
+    state : "default" 0.0;
+    visible : 0;
+  }
+  description {
+    state : "close" 0.0;
+    visible : 1;
+  }
+}
+
+
+// Define button
+BUTTON_CLIPPED("base.minus", 
+	       "arrow_t.png", "arrow_t.png",
+	       14, 14,
+	       "base.header", 0.5 0.0, -7 -1,
+	       "base.header", 0.5 1.0, 7 -1,
+	       "base.minus.clip");
+
+// Define button
+BUTTON_CLIPPED("base.plus", 
+	       "arrow_b.png", "arrow_b.png",
+	       14, 14,
+	       "base.header", 0.5 0.0, -7 -1,
+	       "base.header", 0.5 1.0, 7 -1,
+	       "base.plus.clip");
