@@ -6,6 +6,9 @@
 	  data/themes/default and run the "make preview" command to see
 	  the gui. If you want to work on it your are welcome. So the 
 	  project is not dead, i work on it even if i'm busy.
+	- Add some test around edje. It a little buggy, but it is a beginning
+	- Add a BUTTON_VLINE macro
+	
 2005-03-31(jol):
 	- Fix a dirty bug inside the get_data of the egxp_message
 	- Fix a bug in the roster, in fact, all contacts were referenced by their

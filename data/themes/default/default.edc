@@ -2,8 +2,18 @@
 
 
 images {
-  image, "arrow_b.png" RAW;
-  image, "arrow_t.png" RAW;
+  image : "arrow_b.png" RAW;
+  image : "arrow_t.png" RAW;
+  
+  image : "online.png"  RAW;
+  image : "ffc.png"  RAW;
+  image : "away.png" RAW;
+  image : "xa.png" RAW;
+  image : "dnd.png" RAW;
+  image : "invisible.png" RAW;
+  image : "offline.png" RAW;
+  
+  
 }
 
 

@@ -62,6 +62,72 @@
 
 
 
+#define BUTTON_VLINE(NAME, IMG, IMG2, W, H, PREVIOUS, CLIP) \
+      part {				\
+        name, NAME;			\
+	clip_to, CLIP;                  \
+	description {			\
+	  state, "default" 0.0;		\
+	  min, W H;			\
+	  max, W H;			\
+	  color, 255 255 255 80;	\
+	  rel1 {			\
+	    to, PREVIOUS;		\
+	    relative, 1.0 0.0;		\
+	    offset, 1 0;		\
+	  }				\
+	  rel2 {			\
+	    to, PREVIOUS;		\
+	    relative, 1.0 1.0;		\
+	    offset, W 0;		\
+	  }				\
+	  image {			\
+	    normal, IMG;		\
+	  }				\
+	}				\
+	description {			\
+	  state, "over" 0.0;		\
+	  min, W H;			\
+	  max, W H; 			\
+	  color, 255 255 255 255;	\
+	  rel1 {			\
+	   to, PREVIOUS;		\
+           relative, 1.0 0.0;		\
+	   offset, 1 0;			\
+	  }				\
+	  rel2 {			\
+	    to, PREVIOUS;		\
+	    relative, 1.0 1.0;		\
+	    offset, W 0;		\
+	  }				\
+	  image {			\
+	    normal, IMG;		\
+	  }				\
+	}				\
+	description {			\
+	  state, "down" 0.0;		\
+	  min, W H;			\
+	  max, W H; 			\
+	  color, 255 255 255 255;	\
+	  rel1 {			\
+	    to, PREVIOUS;		\
+	    relative, 1.0 0.0;		\
+	    offset, 1 0;                \
+	  }				\
+	  rel2 {			\
+	    to, PREVIOUS;		\
+	    relative, 1.0 1.0;		\
+	    offset, W H;		\
+	  }				\
+	  image {			\
+	    normal, IMG2;		\
+	  }				\
+	}				\
+      }					
+
+
+
+
 #define BUTTON_CLIPPED(NAME, IMG, IMG2, W, H, REL1_TO, REL1_REL, REL1_OFF, REL2_TO, REL2_REL, REL2_OFF, CLIP) \
       part {				\
         name, NAME;			\
@@ -181,4 +247,7 @@
 #define BUTTON_PROG(NAME, SIG_DOWN, SIG_UP) \
   BUTTON_PROG_ANIM(NAME) \
   BUTTON_PROG_SIG(NAME, SIG_DOWN, SIG_UP)
+
+
+
 
