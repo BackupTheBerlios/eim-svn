@@ -1,0 +1,25 @@
+import os
+Import ('env install_inc install_bin install_lib')
+
+files = ['egxp.c','egxp_condition.c',
+         'egxp_connection.c', 'egxp_message.c',
+         'egxp_node.c', 'egxp_opcode.c',
+         'egxp_protocol_handler.c']
+
+headers = ['egxp.h','egxp_condition.h',
+           'egxp_connection.h', 'egxp_message.h',
+           'egxp_node.h', 'egxp_opcode.h',
+           'egxp_protocol_handler.h',
+           'egxp_node_struct.h']
+
+libegxp = env.SharedLibrary('egxp', files)
+
+
+test = env.Program ('test.c', LIBPATH='./', LIBS='egxp')
+
+
+env.Alias('tarball', env.Distribute (env['DISTTREE'],
+                                     files + headers + ['test.c','SConscript']))
+
+env.Install (os.path.join (install_inc, "egxp"), headers)
+env.Install (install_lib, libegxp)

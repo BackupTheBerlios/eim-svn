@@ -1,3 +1,6 @@
+2005-04-20(jol):
+	- Add a scons support (not finished)
+
 2005-04-14(jol):
 	- Currently, i learn edje in order to create the eim graphical
 	  interface with it. Edje is really great and really powerful even 

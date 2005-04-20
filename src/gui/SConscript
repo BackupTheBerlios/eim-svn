@@ -1,0 +1,12 @@
+import os
+
+Import ('env install_inc install_bin install_lib')
+files = ['gui_main.c']
+headers = ['gui_main.h']
+
+libgui = env.SharedLibrary('gui', files)
+
+env.Alias('tarball', env.Distribute (env['DISTTREE'],
+                                     files + headers + ['SConscript']))
+env.Install (os.path.join (install_inc, "gui"), headers)
+env.Install (install_lib, libgui)

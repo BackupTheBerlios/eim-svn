@@ -1,0 +1,24 @@
+import os
+
+Import ('env install_inc install_bin install_lib')
+files = ['xmpp_im.c', 'xmpp_im_callback.c',
+         'xmpp_im_contact.c', 'xmpp_im_opcode.c',
+         'xmpp_im_roster.c'
+         ]
+
+headers = ['xmpp_im.h', 'xmpp_im_callback.h',
+           'xmpp_im_contact.h', 'xmpp_im_opcode.h',
+           'xmpp_im_roster.h'
+           ]
+
+libxmppim = env.SharedLibrary('xmppim', files)
+
+test = env.Program ('test.c',
+                    LIBPATH=['./', '#src/egxp', '#src/xmpp'],
+                    LIBS=['egxp', 'xmpp', 'xmppim']) 
+
+env.Alias('tarball', env.Distribute (env['DISTTREE'],
+                                     files + headers + ['test.c','SConscript']))
+env.Install (os.path.join (install_inc, "xmpp-im"), headers)
+env.Install (install_lib, libxmppim)
+

@@ -1,0 +1,26 @@
+import os
+
+Import ('env install_inc install_bin install_lib')
+files = ['sha1.c', 'xmpp.c',
+         'xmpp_auth.c', 'xmpp_callback.c',
+         'xmpp_jid.c', 'xmpp_message.c',
+         'xmpp_opcode.c', 'xmpp_presence.c'
+         ]
+
+headers = ['sha1.h', 'xmpp.h',
+           'xmpp_auth.h', 'xmpp_callback.h',
+           'xmpp_jid.h', 'xmpp_message.h',
+           'xmpp_opcode.h', 'xmpp_presence.h'
+           ]
+
+libxmpp = env.SharedLibrary('xmpp', files)
+
+test = env.Program ('test.c',
+                    LIBPATH=['./', '#src/egxp'],
+                    LIBS=['egxp', 'xmpp']) 
+
+env.Alias('tarball', env.Distribute (env['DISTTREE'],
+                                     files + headers + ['test.c','SConscript']))
+
+env.Install (os.path.join (install_inc, "xmpp"), headers)
+env.Install (install_lib, libxmpp)

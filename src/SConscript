@@ -1,0 +1,15 @@
+Import ('env install_inc install_bin install_lib')
+Export ('env install_inc install_bin install_lib')
+
+files = ['eim.c']
+
+eim = env.Program ('eim.c',
+                   LIBPATH=['#src/egxp', '#src/xmpp', '#src/xmpp-im', '#src/gui'],
+                   LIBS=['egxp', 'xmpp', 'xmppim', 'gui'])
+
+env.Alias('tarball', env.Distribute (env['DISTTREE'],
+                                     files + ['SConscript']))
+
+for subdir in ['egxp', 'xmpp', 'xmpp-im', 'gui']:
+    SConscript ('%s/SConscript' % subdir)
+    
