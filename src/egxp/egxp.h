@@ -33,6 +33,26 @@
 #include "egxp_protocol_handler.h"
 #include "egxp_connection.h"
 
+
+/** @addtogroup egxp Enlightenment Generic Xml Protocol
+ * 
+ * The EGXP part is the core the EIM. It allows you to describe
+ * a XML protocol, manage connections and support futurs extension of 
+ * a protocol.
+ *
+ * How does it work ?\n
+ * The first step is to define all opcodes of the protocol. This is
+ * possible using egxp_opcode* function. The next step is to describe 
+ * the protocol that you want to match. To describe a protocol a set of
+ * function are defined, these functions are egxp_nodes*. They allow you
+ * to associate callback for each node.
+ * @{
+ */
+
+
+
+
+
 typedef struct _Egxp Egxp;
 #define EGXP(o) ((Egxp*)o)
 struct _Egxp {
@@ -107,4 +127,7 @@ void * egxp_extension_get (Egxp *e, int id);
  * @return the extension
  */
 void * egxp_extension_get_from_string (Egxp *e, char * id);
+
+
+/* @}*/
 #endif

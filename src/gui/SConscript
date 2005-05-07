@@ -1,8 +1,8 @@
 import os
 
 Import ('env install_inc install_bin install_lib')
-files = ['gui_main.c']
-headers = ['gui_main.h']
+files = ['gui_main.c', 'properties.c']
+headers = ['gui_main.h', 'properties.h']
 
 libgui = env.SharedLibrary('gui', files)
 

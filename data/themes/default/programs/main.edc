@@ -1,63 +1,58 @@
-program {
-  name :   "base.bg.close";
-  signal : "base,close";
-  source : "*";
-  action : STATE_SET "close" 0.0;
-  transition : ACCELERATE 1.0;
-  target : "base.bg";
-}
 
-program {
-  name :   "base.bg.open";
-  signal : "base,open";
-  source : "*";
-  action : STATE_SET "default" 0.0;
-  transition : ACCELERATE 1.0;
-  target : "base.bg";
-}
+/* program { */
+/*   name :   "base.bg.close"; */
+/*   signal : "base,close"; */
+/*   source : "*"; */
+/*   action : STATE_SET "close" 0.0; */
+/*   transition : ACCELERATE 1.0; */
+/*   target : "base.bg"; */
+/* } */
 
-program {
-  name :   "base.plusminus.open";
-  signal : "base,open";
-  source : "*";
-  action : STATE_SET "default" 0.0;
-  target : "base.plus.clip";
-  target : "base.minus.clip";
-  target : "base.toggle.clip";
-}
+/* program { */
+/*   name :   "base.bg.open"; */
+/*   signal : "base,open"; */
+/*   source : "*"; */
+/*   action : STATE_SET "default" 0.0; */
+/*   transition : ACCELERATE 1.0; */
+/*   target : "base.bg"; */
+/* } */
 
-program {
-  name :   "base.plusminus.close";
-  signal : "base,close";
-  source : "*";
-  action : STATE_SET "close" 0.5;
-  target : "base.plus.clip";
-  target : "base.minus.clip";
-  target : "base.toggle.clip";
-  //  after : "try";
-}
+/* program { */
+/*   name :   "base.plusminus.open"; */
+/*   signal : "base,open"; */
+/*   source : "*"; */
+/*   action : STATE_SET "default" 0.0; */
+/*   target : "base.plus.clip"; */
+/*   target : "base.minus.clip"; */
+/*   target : "base.toggle.clip"; */
+/* } */
 
-/*
-program {
-  name : "try";
-  action : STATE_SET "close" 0.5;
-  target : "base.toggle.clip";
-}
-*/
-BUTTON_PROG("base.minus", "", "base,close");
-BUTTON_PROG("base.plus", "", "base,open");
+/* program { */
+/*   name :   "base.plusminus.close"; */
+/*   signal : "base,close"; */
+/*   source : "*"; */
+/*   action : STATE_SET "close" 0.5; */
+/*   target : "base.plus.clip"; */
+/*   target : "base.minus.clip"; */
+/*   target : "base.toggle.clip"; */
+
+/* } */
+
+
+/* BUTTON_PROG("base.minus", "", "base,close"); */
+/* BUTTON_PROG("base.plus", "", "base,open"); */
 
 
 
-/************************************************/
-/************************************************/
-/*  DEFINE THE TOGGLE BUTTON BAR                */
-/************************************************/
-/************************************************/
-BUTTON_PROG("base.toggle.online", "", "");
-BUTTON_PROG("base.toggle.away", "", "");
-BUTTON_PROG("base.toggle.ffc", "", "");
-BUTTON_PROG("base.toggle.xa", "", "");
-BUTTON_PROG("base.toggle.dnd", "", "");
-BUTTON_PROG("base.toggle.invisible", "", "");
-BUTTON_PROG("base.toggle.offline", "", "");
+/* /\************************************************\/ */
+/* /\************************************************\/ */
+/* /\*  DEFINE THE TOGGLE BUTTON BAR                *\/ */
+/* /\************************************************\/ */
+/* /\************************************************\/ */
+/* BUTTON_PROG("base.toggle.online", "", ""); */
+/* BUTTON_PROG("base.toggle.away", "", ""); */
+/* BUTTON_PROG("base.toggle.ffc", "", ""); */
+/* BUTTON_PROG("base.toggle.xa", "", ""); */
+/* BUTTON_PROG("base.toggle.dnd", "", ""); */
+/* BUTTON_PROG("base.toggle.invisible", "", ""); */
+/* BUTTON_PROG("base.toggle.offline", "", ""); */

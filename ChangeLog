@@ -1,3 +1,10 @@
+2005-05-07(jol):
+	- Add some documentation
+	- Continue some test with edje, even if it's not used for now
+	- Use ewl to create the default graphic interface, even if it not for now eyes candy, it will
+	  allow us to have a first version.
+	- Begin to create the Account Properties Window (use psi as model for now).
+
 2005-04-20(jol):
 	- Add a scons support (not finished)
 

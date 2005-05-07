@@ -12,8 +12,6 @@ images {
   image : "dnd.png" RAW;
   image : "invisible.png" RAW;
   image : "offline.png" RAW;
-  
-  
 }
 
 
@@ -28,11 +26,11 @@ collections {
     
     parts {
 #include "parts/main.edc"
-      
     }
   
     programs {
-#include "programs/main.edc"
+      //#include "programs/main.edc"
+    
     }
   }
 }

@@ -27,172 +27,173 @@ part {
 }
 
 
-// Define Header
-part {
-  name, "base.header";
-  type, RECT;
-  mouse_events, 0;
+/* // Define Header */
+/* part { */
+/*   name, "base.header"; */
+/*   type, RECT; */
+/*   mouse_events, 0; */
   
-  // define the background color of the header
-  description {
-    state, "default" 0.0;
-    color, 0 0 0 180;
+/*   // define the background color of the header */
+/*   description { */
+/*     state, "default" 0.0; */
+/*     color, 0 0 0 180; */
     
-    rel1 {
-      relative, 0.0 0.0;
-      offset, 0 0;
-      to, "base.bg";
-    }
+/*     rel1 { */
+/*       relative, 0.0 0.0; */
+/*       offset, 0 0; */
+/*       to, "base.bg"; */
+/*     } */
     
-    rel2 {
-      relative, 1.0 0.0;
-      offset, -1 10;
-      to, "base.bg";
-    }
-  }
-}
+/*     rel2 { */
+/*       relative, 1.0 0.0; */
+/*       offset, -1 10; */
+/*       to, "base.bg"; */
+/*     } */
+/*   } */
+/* } */
 
 
-// define the footer
-part {
-  name, "base.footer";
-  type, RECT;
-  mouse_events, 0;
+/* // define the footer */
+/* part { */
+/*   name, "base.footer"; */
+/*   type, RECT; */
+/*   mouse_events, 0; */
 
-  // define the background color of the header
-  description {
-    state, "default" 0.0;
-    color, 0 0 0 180;
+/*   // define the background color of the header */
+/*   description { */
+/*     state, "default" 0.0; */
+/*     color, 0 0 0 180; */
         
-    rel1 {
-      relative, 0.0 1.0;
-      offset, 0 -10;
-      to, "base.bg";
-    }
-    rel2 {
-      relative, 1.0 1.0;
-      offset, -1 -1;
-      to, "base.bg";
-    }
-  }
-}
+/*     rel1 { */
+/*       relative, 0.0 1.0; */
+/*       offset, 0 -10; */
+/*       to, "base.bg"; */
+/*     } */
+/*     rel2 { */
+/*       relative, 1.0 1.0; */
+/*       offset, -1 -1; */
+/*       to, "base.bg"; */
+/*     } */
+/*   } */
+/* } */
 
 
 
-// Define the Minus clip
-part {
-  name : "base.minus.clip";
-  type : RECT;
-  mouse_events : 0;
+/* // Define the Minus clip */
+/* part { */
+/*   name : "base.minus.clip"; */
+/*   type : RECT; */
+/*   mouse_events : 0; */
   
-  description {
-    state : "default" 0.0;
-    visible : 1;
-  }
+/*   description { */
+/*     state : "default" 0.0; */
+/*     visible : 1; */
+/*   } */
   
-  description {
-    state : "close" 0.0;
-    visible : 0;
-  }
-}
+/*   description { */
+/*     state : "close" 0.0; */
+/*     visible : 0; */
+/*   } */
+/* } */
 
 
-// Define the Plus clip
-part {
-  name : "base.plus.clip";
-  type : RECT;
-  mouse_events : 0;
-  description {
-    state : "default" 0.0;
-    visible : 0;
-  }
-  description {
-    state : "close" 0.0;
-    visible : 1;
-  }
-}
+/* // Define the Plus clip */
+/* part { */
+/*   name : "base.plus.clip"; */
+/*   type : RECT; */
+/*   mouse_events : 0; */
+/*   description { */
+/*     state : "default" 0.0; */
+/*     visible : 0; */
+/*   } */
+/*   description { */
+/*     state : "close" 0.0; */
+/*     visible : 1; */
+/*   } */
+/* } */
 
 
-
-/************************************************/
-/************************************************/
-/*  DEFINE THE TOGGLE BUTTON BAR                */
-/************************************************/
-/************************************************/
-#define BASE_ICON_TB_SIZE 14
-
-// Define the Toolbar Clip
-part {
-  name : "base.toggle.clip";
-  type : RECT;
-  mouse_events : 0;
-  description {
-    state : "default" 0.0;
-    visible : 0;
-  }
-  description {
-    state : "close" 0.0;
-    visible : 1;
-  }
-}
+/* /\************************************************\/ */
+/* /\************************************************\/ */
+/* /\*  DEFINE THE TOGGLE BUTTON BAR                *\/ */
+/* /\************************************************\/ */
+/* /\************************************************\/ */
+/* #define BASE_ICON_TB_SIZE 14 */
 
 
-BUTTON_CLIPPED("base.toggle.online",
-	       "online.png", "online.png",
-	       BASE_ICON_TB_SIZE, BASE_ICON_TB_SIZE,
-	       "base.bg", 0.0 0.0, 0 10,
-	       "base.bg", 0.0 0.0, BASE_ICON_TB_SIZE (BASE_ICON_TB_SIZE+10),
-	       "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.ffc",
-	     "ffc.png", "ffc.png",
-	     14, 14,
-	     "base.toggle.online",
-	     "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.away",
-	     "away.png", "away.png",
-	     14, 14,
-	     "base.toggle.ffc",
-	     "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.xa",
-	     "xa.png", "xa.png",
-	     14, 14,
-	     "base.toggle.away",
-	     "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.dnd",
-	     "dnd.png", "dnd.png",
-	     14, 14,
-	     "base.toggle.xa",
-	     "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.invisible",
-	     "invisible.png", "invisible.png",
-	     14, 14,
-	     "base.toggle.dnd",
-	     "base.toggle.clip");
-
-BUTTON_VLINE("base.toggle.offline",
-	     "offline.png", "invisible.png",
-	     14, 14,
-	     "base.toggle.invisible",
-	     "base.toggle.clip");
+/* // Define the Toolbar Clip */
+/* part { */
+/*   name : "base.toggle.clip"; */
+/*   type : RECT; */
+/*   mouse_events : 0; */
+/*   description { */
+/*     state : "default" 0.0; */
+/*     visible : 0; */
+/*   } */
+/*   description { */
+/*     state : "close" 0.0; */
+/*     visible : 1; */
+/*   } */
+/* } */
 
 
-// Define button
-BUTTON_CLIPPED("base.minus", 
-	       "arrow_t.png", "arrow_t.png",
-	       14, 14,
-	       "base.header", 0.5 0.0, -7 -1,
-	       "base.header", 0.5 1.0, 7 -1,
-	       "base.minus.clip");
+/* BUTTON_CLIPPED("base.toggle.online", */
+/* 	       "online.png", "online.png", */
+/* 	       BASE_ICON_TB_SIZE, BASE_ICON_TB_SIZE, */
+/* 	       "base.bg", 0.0 0.0, 0 10, */
+/* 	       "base.bg", 0.0 0.0, BASE_ICON_TB_SIZE (BASE_ICON_TB_SIZE+10), */
+/* 	       "base.toggle.clip"); */
 
-// Define button
-BUTTON_CLIPPED("base.plus", 
-	       "arrow_b.png", "arrow_b.png",
-	       14, 14,
-	       "base.header", 0.5 0.0, -7 -1,
-	       "base.header", 0.5 1.0, 7 -1,
-	       "base.plus.clip");
+/* BUTTON_VLINE("base.toggle.ffc", */
+/* 	     "ffc.png", "ffc.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.online", */
+/* 	     "base.toggle.clip"); */
+
+/* BUTTON_VLINE("base.toggle.away", */
+/* 	     "away.png", "away.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.ffc", */
+/* 	     "base.toggle.clip"); */
+
+/* BUTTON_VLINE("base.toggle.xa", */
+/* 	     "xa.png", "xa.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.away", */
+/* 	     "base.toggle.clip"); */
+
+/* BUTTON_VLINE("base.toggle.dnd", */
+/* 	     "dnd.png", "dnd.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.xa", */
+/* 	     "base.toggle.clip"); */
+
+/* BUTTON_VLINE("base.toggle.invisible", */
+/* 	     "invisible.png", "invisible.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.dnd", */
+/* 	     "base.toggle.clip"); */
+
+/* BUTTON_VLINE("base.toggle.offline", */
+/* 	     "offline.png", "invisible.png", */
+/* 	     14, 14, */
+/* 	     "base.toggle.invisible", */
+/* 	     "base.toggle.clip"); */
+
+
+/* // Define button */
+/* BUTTON_CLIPPED("base.minus",  */
+/* 	       "arrow_t.png", "arrow_t.png", */
+/* 	       14, 14, */
+/* 	       "base.header", 0.5 0.0, -7 -1, */
+/* 	       "base.header", 0.5 1.0, 7 -1, */
+/* 	       "base.minus.clip"); */
+
+/* // Define button */
+/* BUTTON_CLIPPED("base.plus",  */
+/* 	       "arrow_b.png", "arrow_b.png", */
+/* 	       14, 14, */
+/* 	       "base.header", 0.5 0.0, -7 -1, */
+/* 	       "base.header", 0.5 1.0, 7 -1, */
+/* 	       "base.plus.clip"); */
+

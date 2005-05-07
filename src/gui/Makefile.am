@@ -2,10 +2,12 @@ noinst_LTLIBRARIES = libgui.la
 
 pkgincludeinputdir = $(pkgincludedir)/gui
 pkgincludeinput_HEADERS= \
-	gui_main.h
+	gui_main.h       \
+	properties.h
 
-libgui_la_SOURCES = \
-	gui_main.c
+libgui_la_SOURCES =      \
+	gui_main.c       \
+	properties.c
 
 libgui_la_CFLAGS = \
 	-I$(top_srcdir)/src                 \

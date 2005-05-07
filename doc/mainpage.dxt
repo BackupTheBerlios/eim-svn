@@ -1,0 +1,45 @@
+/*! \mainpage Enlightenment Instant Messenger
+
+\par Introduction
+<a href="http://eim.berlios.de">EIM</a> is an instant messenger especially designed to extend it easily. 
+The most important stuff is the \ref egxp part. You can define
+a XML based protocol without too much effort using EGXP.
+\par
+As a proof of concept, we begin to implement the Jabber protocol using EGXP.
+Jabber is an open XML based protocol. So, aims of EIM are to implement 
+entirely the Jabber protocol and to become a Jabber development platform to test
+new functionnalities.    
+\par
+Of course, a nice graphical interface will be availabe. It will be 
+developed using the Enligthenment Foundation Libraries.
+\par
+This project is an early stage of development. Currently, there is no
+available release but you can get a development version on the 
+<a href="http://developer.berlios.de/projects/eim">project page</a>.
+
+
+\par Overview
+EGXP is the base of our project, it provides severals functionnalities:
+
+<ul>
+  <li>Define the keys words of a protocol, we mean by key words the tags and attributes names.</li>
+  <li>Associate callbacks at the begin and at the end of a specific node. A node is a tag with some attributes.</li>
+  <li>Describe your protocol.</li>
+  <li>Add new functionnalities to a protocol without modify it.</li>  
+  <li>Manage network connection.</li>
+  <li>...</li>
+</ul>
+
+\par
+Using EGXP functionnalities we begin to define the XMPP protocol 
+and the XMPP-IM extension.
+
+
+\par Requirements
+EIM is entirely based on the EFL, so if you have an installation of the <b>EFL modules</b> you should be able to compile EIM. For now we use the <a href="expat.sourceforge.net/">Expat XML Parser</a>, so you must install it.
+
+
+\par Installation
+You have two choices to compile and to install EIM. You can use the autotools or use <a href="http//www.scons.org">SCons</a>.
+
+*/

@@ -28,6 +28,8 @@
 
 #include <Ewl.h>
 
+
+#include "properties.h"
 #include "gui_main.h"
 
 
@@ -120,7 +122,7 @@ int gui_main_init (char * winname, char * theme) {
   ecore_evas_geometry_get(ee, &x, &y, &w, &h);
   evas_object_resize(background, w, h);
   evas_object_show(background);
-
+  
   /* refresh the background */
   esmart_trans_x11_freshen(background, x, y, w, h);
   
@@ -154,30 +156,76 @@ void _gui_main_destroy_cb(Ewl_Widget *w, void *event, void *data) {
 }
 
 
-void item_cb(Ewl_Widget *w, void *event, void *data) {
-  Ewl_Widget * imenubox;
-  Ewl_Widget * item;
+void item_cb(Ewl_Widget *w, void *ev_data, void *data) {
+  Ewl_Widget *menu = data;
+  Ewl_Widget *parent = menu->parent;
+  Ewl_Event_Mouse_Down *ev = ev_data;
   
-  /*  imenubox = ewl_vbox_new ();
-  ewl_object_fill_policy_set (EWL_OBJECT(imenubox), EWL_FLAG_FILL_FILL);
-  ewl_widget_show (imenubox);
-  */
-  imenubox = ewl_menu_new ("", "Test");
-  
-  
-  item = ewl_menu_item_new ("", "titi");
-  ewl_container_child_append (EWL_CONTAINER (imenubox), item);
-  ewl_widget_show (item);
-
-  // ewl_container_child_append (EWL_CONTAINER (w), imenubox);
-
-  //  ewl_widget_show (EWL_MENU(imenubox)->base.popup);
-
-
-  ewl_menu_configure_cb (imenubox, event, data);
-  ewl_menu_expand_cb (imenubox, event, data);
-  ewl_widget_show (imenubox);
+  if (ev->button == 3) {
+    printf("Menu callback %d, %d\n", ev->x, ev->y);
+    ewl_object_position_request(EWL_OBJECT(menu), ev->x, ev->y - EWL_OBJECT(parent)->current.h);
+    ewl_widget_show (menu);
+    ewl_callback_call(menu, EWL_CALLBACK_SELECT);
+  }
 }
+
+
+
+Ewl_Widget * create_menu (Ewl_Widget * parent) {
+  Ewl_Widget *menu;
+  Ewl_Widget *item;
+  
+  menu = ewl_menu_new(NULL, NULL);
+  ewl_container_child_append(EWL_CONTAINER(parent), menu);
+  
+  item = ewl_menu_item_new(NULL, "Action 1");
+  ewl_container_child_append(EWL_CONTAINER(menu), item);
+  ewl_widget_show(item);
+  
+  item = ewl_menu_item_new(NULL, "Action 2");
+  ewl_container_child_append(EWL_CONTAINER(menu), item);
+  ewl_widget_show(item);
+
+  return menu;
+}
+
+
+/**
+ * Create an item for the tree with an image. 
+ */
+Ewl_Widget * create_tree_item (Ewl_Widget * tree, char * img_path, char * item_text, void * user_data) {
+
+  Ewl_Widget * hbox;
+  Ewl_Widget *img;
+  Ewl_Widget * text;
+
+  /* create the horizontal box that should contains image + text, then add the clicked callback */
+  hbox = ewl_hbox_new (); 
+  ewl_object_fill_policy_set(EWL_OBJECT(hbox), EWL_FLAG_FILL_ALL);
+  ewl_callback_append(hbox, EWL_CALLBACK_MOUSE_DOWN, item_cb, user_data);
+  ewl_widget_show (hbox);
+  
+  /* create the image and add it to the hbox */
+  if (img_path != NULL) {
+    img = ewl_image_new(img_path, NULL);
+    ewl_object_alignment_set(EWL_OBJECT(img), EWL_FLAG_ALIGN_LEFT);
+    ewl_object_fill_policy_set(EWL_OBJECT(img), EWL_FLAG_FILL_HSHRINK);
+    ewl_container_child_append (EWL_CONTAINER (hbox), img);
+    ewl_widget_show(img);
+  }
+  
+  /* create the text and add it to the hbox */
+  text = ewl_text_new(item_text);
+  ewl_container_child_append (EWL_CONTAINER (hbox), text);
+  ewl_widget_show(text);
+  
+  
+  /* append the item to the tree */
+  ewl_tree_row_add (EWL_TREE(tree), NULL, &hbox);
+  
+  return hbox;
+}
+
 
 
 int gui_main_init2 (char * winname, char * theme) {
@@ -187,55 +235,48 @@ int gui_main_init2 (char * winname, char * theme) {
 
   Ewl_Widget     * item = NULL;
   Ewl_Widget     * box_item = NULL;
-
-  /* create the main windows */
-  main_win = ewl_window_new();
-  /* define size */
-  ewl_object_size_request(EWL_OBJECT(main_win), 80, 300);
-  ewl_object_fill_policy_set(EWL_OBJECT(main_win), EWL_FLAG_FILL_ALL);
-  /* define title */
-  ewl_window_title_set(EWL_WINDOW(main_win),
-		       "The Enlightenment Instant Messenger");
+  Ewl_Widget     * menu;
   
-  ewl_callback_append(main_win, EWL_CALLBACK_DELETE_WINDOW, _gui_main_destroy_cb, NULL);
-  ewl_window_name_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
-  ewl_window_class_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
-  ewl_widget_show(main_win);
-
-
-  /* create the container */
-  box = ewl_vbox_new();
-  ewl_container_child_append(EWL_CONTAINER(main_win), box);
-  ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL);
-  ewl_widget_show(box);
+/*   /\* create the main windows *\/ */
+/*   main_win = ewl_window_new(); */
   
+/*   /\* define size *\/ */
+/*   ewl_object_size_request(EWL_OBJECT(main_win), 80, 300); */
+/*   ewl_object_fill_policy_set(EWL_OBJECT(main_win), EWL_FLAG_FILL_ALL); */
   
-  /* create the tree root object */
-  tree = ewl_tree_new (1); 
-  ewl_container_child_append (EWL_CONTAINER(box), tree);
-  ewl_widget_show(tree);
+/*   /\* define title *\/ */
+/*   ewl_window_title_set(EWL_WINDOW(main_win), */
+/* 		       "The Enlightenment Instant Messenger"); */
+  
+/*   ewl_callback_append(main_win, EWL_CALLBACK_DELETE_WINDOW, _gui_main_destroy_cb, NULL); */
+/*   ewl_window_name_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger"); */
+/*   ewl_window_class_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger"); */
+/*   ewl_widget_show(main_win); */
 
   
-  /* add some test */
-  Ewl_Widget * hbox = ewl_hbox_new (); 
-  ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL);
-  ewl_widget_show (hbox);
-  ewl_callback_append(hbox, EWL_CALLBACK_CLICKED, item_cb, NULL);
+/*   /\* create the container *\/ */
+/*   box = ewl_vbox_new(); */
+/*   ewl_container_child_append(EWL_CONTAINER(main_win), box); */
+/*   ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL); */
+/*   ewl_widget_show(box); */
   
   
-  /* image */
-  Ewl_Widget *img = ewl_image_new("/usr/share/psi/iconsets/roster/default/online.png", NULL);
-  ewl_object_alignment_set(EWL_OBJECT(img), EWL_FLAG_ALIGN_LEFT);
-  ewl_object_fill_policy_set(EWL_OBJECT(img), EWL_FLAG_FILL_HSHRINK);
-  ewl_container_child_append (EWL_CONTAINER (hbox), img);
-  ewl_widget_show(img);
+/*   /\* create the tree root object *\/ */
+/*   tree = ewl_tree_new (1);  */
+/*   ewl_container_child_append (EWL_CONTAINER(box), tree); */
+/*   ewl_widget_show(tree); */
+
+/*   /\* create the menu *\/ */
+/*   menu = create_menu (main_win); */
   
-  /* text */
-  Ewl_Widget * text = ewl_text_new("text");
-  ewl_container_child_append (EWL_CONTAINER (hbox), text);
-  ewl_widget_show(text);
-  
-  ewl_tree_row_add (EWL_TREE(tree), NULL, &hbox);
+/*   /\* Add an item *\/ */
+/*   create_tree_item (tree, NULL, "entry 1", menu); */
+/*   create_tree_item (tree, NULL, "entry 2", menu); */
+/*   create_tree_item (tree, NULL, "entry 3", menu); */
+
+  /* test properties windows */
+  main_win = create_properties_window ();
+  ewl_widget_show (main_win);
   
   return 0;
 }
