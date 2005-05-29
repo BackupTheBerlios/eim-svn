@@ -8,7 +8,8 @@ SUBDIRS= \
 bin_PROGRAMS = eim
 
 eim_SOURCES = \
-	eim.c
+	eim.c  \
+	conf.c
 
 eim_CFLAGS = \
 	-I$(top_srcdir)/src           \

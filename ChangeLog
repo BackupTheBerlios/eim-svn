@@ -1,3 +1,7 @@
+2005-05-30(jol):
+	- begin the config stuff
+	- fix compilation error
+	
 2005-05-07(jol):
 	- Add some documentation
 	- Continue some test with edje, even if it's not used for now

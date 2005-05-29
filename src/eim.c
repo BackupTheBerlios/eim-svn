@@ -25,7 +25,9 @@
 
 #include <Ewl.h>
 
+#include "egxp/egxp.h"
 #include "gui/gui_main.h"
+#include "conf.h"
 
 
 static int eim_handler_signal_exit (void *data, int ev_type, void *ev) {
@@ -82,24 +84,38 @@ int main (int argc, char **argv) {
   
   
   /* initialize the core */
-  ecore_init ();
+  if (!ecore_init()) {
+    printf("ERROR: can't initialize Ecore.\n");
+    return -1;
+  }
   if (!ewl_init(&argc, argv)) {
-    printf("Unable to init ewl\n");
+    printf("ERROR: can't initialize Ewl\n");
     return -1;
   }
 
   ecore_event_handler_add (ECORE_EVENT_SIGNAL_EXIT, eim_handler_signal_exit, NULL);
-  if (!ecore_con_init ()) return -1;
-  
+
+  if (!ecore_con_init ()){
+    printf("ERROR: can't initialize Ecore Connection\n");
+    return -1;
+  }
+
+  /* define the args */
   ecore_app_args_set (argc, (const char **) argv);
+
+  Egxp * eg = egxp_new ();
+
+  eim_config_init (eg);
+  
 
   if (gui_main_init2 ("eim", theme_file)) return -1;
   
   /* process the main loop */
   ecore_main_loop_begin ();
-
+  printf("Here\n");
 
   /* shutdown all ecore service */
+  eim_config_shutdown ();
   ewl_shutdown ();
   ecore_shutdown ();
   

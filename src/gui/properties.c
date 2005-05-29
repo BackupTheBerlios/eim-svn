@@ -1,5 +1,48 @@
 #include <assert.h>
+#include <string.h>
 #include "properties.h"
+
+
+/**
+ * Define the properties for the Properties page.
+ * It contains all parameters available inside the Egxp and its extension
+ * We use this structure has temporary variable.
+ */
+typedef struct _Properties Properties;
+#define PROPERTIES(o) ((Properties*)o)
+struct _Properties {
+  /* account */
+  char * jabber_id;
+  char * password;
+  char * resource;
+  int priority;
+
+  /* connection */
+  int use_ssl;
+  int allow_plaintext;
+  int send_keep_alive;
+  // manual server host port
+
+  /* details */
+
+  /* preferences */
+  int auto_connect;
+  int auto_reconnect;
+  int log_history;
+  int ignore_ssl_warning;
+};
+
+
+
+Properties * _properties_new () {
+  Properties * tmp = PROPERTIES(malloc (sizeof(Properties)));
+  memset (tmp, 0, sizeof (Properties));
+
+  return tmp;
+}
+
+
+
 
 
 /**
@@ -8,7 +51,7 @@
  *  - password
  *  - resource + priority
  */
-void _create_account_property_page (Ewl_Widget * notebook) {
+void _create_account_property_page (Ewl_Widget * notebook, Egxp * eg) {
   assert (notebook);
   
   Ewl_Widget * tab;
@@ -65,7 +108,7 @@ void _create_account_property_page (Ewl_Widget * notebook) {
  * - Send "Keep-Alive" packets (for NAT timeouts)
  * - Manually specify Server Host/Port
  */
-void _create_connection_property_page (Ewl_Widget * notebook) {
+void _create_connection_property_page (Ewl_Widget * notebook, Egxp *eg) {
   assert (notebook);
   
   Ewl_Widget * tab;
@@ -73,6 +116,7 @@ void _create_connection_property_page (Ewl_Widget * notebook) {
   Ewl_Widget * hbox;
   Ewl_Widget * text;
   Ewl_Widget * entry;
+  Ewl_Widget * misc;
 
   /* create the tab entry */
   tab = ewl_text_new ("Connection");
@@ -81,6 +125,21 @@ void _create_connection_property_page (Ewl_Widget * notebook) {
   /* create the vbox that will contain all widget of the page */
   vbox = ewl_vbox_new ();
   ewl_widget_show (vbox);
+  
+  /* use SSL encryption */
+  misc = ewl_checkbutton_new ("Use SSL encryption");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
+
+  /* allow plain text login */
+  misc = ewl_checkbutton_new ("Allow plain text login");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
+
+  /* Send "keep alive" packets (for NAT timeouts) */
+  misc = ewl_checkbutton_new ("Send \"keep alive\" packets (for NAT timeouts)");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
   
 
   /* add the tab and vbox to the notebook */
@@ -94,7 +153,7 @@ void _create_connection_property_page (Ewl_Widget * notebook) {
  * - Edit Personal Information
  * - Allows to change password on the server side
  */
-void _create_details_property_page (Ewl_Widget * notebook) {
+void _create_details_property_page (Ewl_Widget * notebook, Egxp *eg) {
   assert (notebook);
   
   Ewl_Widget * tab;
@@ -116,6 +175,8 @@ void _create_details_property_page (Ewl_Widget * notebook) {
   ewl_notebook_page_append (EWL_NOTEBOOK(notebook), tab, vbox);
 }
 
+
+
 /**
  * Create the preferences property page and add it to the notebook
  * - Automatically connect on startup
@@ -123,7 +184,7 @@ void _create_details_property_page (Ewl_Widget * notebook) {
  * - Log message history
  * - Ignore SSL warnings
  */
-void _create_preferences_property_page (Ewl_Widget * notebook) {
+void _create_preferences_property_page (Ewl_Widget * notebook, Egxp * eg) {
   assert (notebook);
   
   Ewl_Widget * tab;
@@ -131,6 +192,7 @@ void _create_preferences_property_page (Ewl_Widget * notebook) {
   Ewl_Widget * hbox;
   Ewl_Widget * text;
   Ewl_Widget * entry;
+  Ewl_Widget * misc;
 
   /* create the tab entry */
   tab = ewl_text_new ("Preferences");
@@ -140,7 +202,26 @@ void _create_preferences_property_page (Ewl_Widget * notebook) {
   vbox = ewl_vbox_new ();
   ewl_widget_show (vbox);
   
+  /* Automatically connect on startup */
+  misc = ewl_checkbutton_new ("Automatically connect on startup");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
 
+  /* Automatically reconnect if disconnected */
+  misc = ewl_checkbutton_new ("Automatically reconnect if disconnected");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
+
+  /* Log message history */
+  misc = ewl_checkbutton_new ("Log message history");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
+
+  /* Ignore SSL warnings */
+  misc = ewl_checkbutton_new ("Ignore SSL warnings");
+  ewl_container_child_append (EWL_CONTAINER(vbox), misc);
+  ewl_widget_show(misc);
+  
   /* add the tab and vbox to the notebook */
   ewl_notebook_page_append (EWL_NOTEBOOK(notebook), tab, vbox);
 }
@@ -155,25 +236,33 @@ void _create_preferences_property_page (Ewl_Widget * notebook) {
  * This windows should contains all properties
  * @return the newly created windows
  */
-Ewl_Widget * create_properties_window () {
-  Ewl_Widget * win;
+Ewl_Widget * create_properties_dialog (Egxp * eg) {
+  Ewl_Widget * dialog;
   Ewl_Widget * notebook;
   Ewl_Widget * vbox;
+  Ewl_Widget * button;
 
-  /* create the new window */
-  win = ewl_window_new ();
-  ewl_object_size_request(EWL_OBJECT(win), 300, 80); 
-  ewl_object_fill_policy_set(EWL_OBJECT(win), EWL_FLAG_FILL_ALL);
+  /* create the new dialog */
+  dialog = ewl_dialog_new(EWL_POSITION_BOTTOM);
+  ewl_dialog_has_separator_set(EWL_DIALOG(dialog), 1);
+
+  /* create the ok button */
+  button = ewl_dialog_button_add(EWL_DIALOG(dialog),"OK", EWL_RESPONSE_OK);
+  ewl_container_child_append(EWL_CONTAINER(dialog), button);
+  //ewl_callback_append(o, EWL_CALLBACK_CLICKED, dialog_clicked_cb, dialog);
+  ewl_widget_show(button);
   
-  ewl_window_title_set (EWL_WINDOW(win), "EIM Properties");
-  ewl_window_name_set (EWL_WINDOW(win), "EIM Properties");
-  ewl_window_class_set (EWL_WINDOW(win), "EIM Properties");
-  // should insert the CALLBACK DELETE FUNCTION
+  
+  /* create the cancel button */
+  button = ewl_dialog_button_left_add(EWL_DIALOG(dialog),"Cancel", EWL_RESPONSE_CANCEL);
+  ewl_container_child_append(EWL_CONTAINER(dialog), button);
+  //ewl_callback_append(o, EWL_CALLBACK_CLICKED, dialog_clicked_cb, dialog);
+  ewl_widget_show(button);
+  
 
   /* create the vbox which contains the notebook */
   vbox = ewl_vbox_new ();
   ewl_object_fill_policy_set (EWL_OBJECT(vbox), EWL_FLAG_FILL_SHRINK);
-  ewl_container_child_append (EWL_CONTAINER (win), vbox);
   ewl_widget_show (vbox);
 
   /* create the note book */
@@ -182,14 +271,17 @@ Ewl_Widget * create_properties_window () {
   ewl_widget_appearance_set (notebook, "window");
   
   /* create the Account Page */
-  _create_account_property_page (notebook);
-  _create_connection_property_page (notebook);
-  _create_details_property_page (notebook);
-  _create_preferences_property_page (notebook);
-
-  /* after added pages inside the notebook, we add it to the window */
+  _create_account_property_page (notebook, eg);
+  _create_connection_property_page (notebook, eg);
+  _create_details_property_page (notebook, eg);
+  _create_preferences_property_page (notebook, eg);
+  
+  /* after added pages inside the notebook, we add it to the dialog */
   ewl_container_child_append (EWL_CONTAINER(vbox), notebook);
   ewl_widget_show (notebook);
   
-  return win;
+  ewl_dialog_widget_add(EWL_DIALOG(dialog), vbox);
+  ewl_object_alignment_set(EWL_OBJECT(dialog), EWL_FLAG_ALIGN_CENTER);
+  
+  return dialog;
 }

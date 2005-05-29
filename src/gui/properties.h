@@ -3,10 +3,12 @@
 
 #include "Ewl.h"
 
+#include "egxp/egxp.h"
+
 /**
  * This windows should contains all properties
  */
-Ewl_Widget * create_properties_window ();
+Ewl_Widget * create_properties_dialog (Egxp * eg);
 
 
 

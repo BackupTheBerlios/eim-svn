@@ -237,46 +237,52 @@ int gui_main_init2 (char * winname, char * theme) {
   Ewl_Widget     * box_item = NULL;
   Ewl_Widget     * menu;
   
-/*   /\* create the main windows *\/ */
-/*   main_win = ewl_window_new(); */
-  
-/*   /\* define size *\/ */
-/*   ewl_object_size_request(EWL_OBJECT(main_win), 80, 300); */
-/*   ewl_object_fill_policy_set(EWL_OBJECT(main_win), EWL_FLAG_FILL_ALL); */
-  
-/*   /\* define title *\/ */
-/*   ewl_window_title_set(EWL_WINDOW(main_win), */
-/* 		       "The Enlightenment Instant Messenger"); */
-  
-/*   ewl_callback_append(main_win, EWL_CALLBACK_DELETE_WINDOW, _gui_main_destroy_cb, NULL); */
-/*   ewl_window_name_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger"); */
-/*   ewl_window_class_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger"); */
-/*   ewl_widget_show(main_win); */
 
   
-/*   /\* create the container *\/ */
-/*   box = ewl_vbox_new(); */
-/*   ewl_container_child_append(EWL_CONTAINER(main_win), box); */
-/*   ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL); */
-/*   ewl_widget_show(box); */
-  
-  
-/*   /\* create the tree root object *\/ */
-/*   tree = ewl_tree_new (1);  */
-/*   ewl_container_child_append (EWL_CONTAINER(box), tree); */
-/*   ewl_widget_show(tree); */
 
-/*   /\* create the menu *\/ */
-/*   menu = create_menu (main_win); */
+
+
+
+  /* create the main windows */
+  main_win = ewl_window_new();
   
-/*   /\* Add an item *\/ */
-/*   create_tree_item (tree, NULL, "entry 1", menu); */
-/*   create_tree_item (tree, NULL, "entry 2", menu); */
-/*   create_tree_item (tree, NULL, "entry 3", menu); */
+  /* define size */
+  ewl_object_size_request(EWL_OBJECT(main_win), 80, 300);
+  ewl_object_fill_policy_set(EWL_OBJECT(main_win), EWL_FLAG_FILL_ALL);
+  
+  /* define title */
+  ewl_window_title_set(EWL_WINDOW(main_win),
+		       "The Enlightenment Instant Messenger");
+  
+  ewl_callback_append(main_win, EWL_CALLBACK_DELETE_WINDOW, _gui_main_destroy_cb, NULL);
+  ewl_window_name_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
+  ewl_window_class_set(EWL_WINDOW(main_win), "Enlightenment Instant Messenger");
+  ewl_widget_show(main_win);
+
+  
+  /* create the container */
+  box = ewl_vbox_new();
+  ewl_container_child_append(EWL_CONTAINER(main_win), box);
+  ewl_object_fill_policy_set(EWL_OBJECT(box), EWL_FLAG_FILL_ALL);
+  ewl_widget_show(box);
+  
+  
+  /* create the tree root object */
+  tree = ewl_tree_new (1);
+  ewl_container_child_append (EWL_CONTAINER(box), tree);
+  ewl_widget_show(tree);
+
+  /* create the menu */
+  menu = create_menu (main_win);
+  
+  /* Add an item */
+  create_tree_item (tree, NULL, "entry 1", menu);
+  create_tree_item (tree, NULL, "entry 2", menu);
+  create_tree_item (tree, NULL, "entry 3", menu);
 
   /* test properties windows */
-  main_win = create_properties_window ();
-  ewl_widget_show (main_win);
+  /*  main_win = create_properties_dialog (NULL);
+      ewl_widget_show (main_win);****/
   
   return 0;
 }
