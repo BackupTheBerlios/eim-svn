@@ -1,9 +1,9 @@
 Import ('env install_inc install_bin install_lib')
 Export ('env install_inc install_bin install_lib')
 
-files = ['eim.c']
+files = ['main.c']
 
-eim = env.Program ('eim.c',
+eim = env.Program (files,
                    LIBPATH=['#src/egxp', '#src/xmpp', '#src/xmpp-im', '#src/gui'],
                    LIBS=['egxp', 'xmpp', 'xmppim', 'gui'])
 

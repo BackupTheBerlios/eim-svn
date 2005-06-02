@@ -3,43 +3,8 @@
 #include "properties.h"
 
 
-/**
- * Define the properties for the Properties page.
- * It contains all parameters available inside the Egxp and its extension
- * We use this structure has temporary variable.
- */
-typedef struct _Properties Properties;
-#define PROPERTIES(o) ((Properties*)o)
-struct _Properties {
-  /* account */
-  char * jabber_id;
-  char * password;
-  char * resource;
-  int priority;
-
-  /* connection */
-  int use_ssl;
-  int allow_plaintext;
-  int send_keep_alive;
-  // manual server host port
-
-  /* details */
-
-  /* preferences */
-  int auto_connect;
-  int auto_reconnect;
-  int log_history;
-  int ignore_ssl_warning;
-};
 
 
-
-Properties * _properties_new () {
-  Properties * tmp = PROPERTIES(malloc (sizeof(Properties)));
-  memset (tmp, 0, sizeof (Properties));
-
-  return tmp;
-}
 
 
 
