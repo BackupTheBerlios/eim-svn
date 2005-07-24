@@ -103,7 +103,8 @@ int gui_main_init (char * winname, char * theme) {
   /* remove border */
   //  ecore_evas_borderless_set (ee, 1);
   /* define the window on the below level layer */
-  ecore_x_window_prop_layer_set(win, ECORE_X_WINDOW_LAYER_BELOW);
+  //ecore_x_window_prop_layer_set(win, ECORE_X_WINDOW_LAYER_BELOW);
+
   /* define callback */
   ecore_evas_callback_resize_set(ee, gui_main_resize_cb);
   ecore_evas_callback_move_set(ee, gui_main_move_cb);
@@ -237,12 +238,6 @@ int gui_main_init2 (char * winname, char * theme) {
   Ewl_Widget     * box_item = NULL;
   Ewl_Widget     * menu;
   
-
-  
-
-
-
-
   /* create the main windows */
   main_win = ewl_window_new();
   
@@ -274,11 +269,12 @@ int gui_main_init2 (char * winname, char * theme) {
 
   /* create the menu */
   menu = create_menu (main_win);
-  
+  ewl_callback_append(tree, EWL_CALLBACK_MOUSE_DOWN, item_cb, menu);
+
   /* Add an item */
-  create_tree_item (tree, NULL, "entry 1", menu);
-  create_tree_item (tree, NULL, "entry 2", menu);
-  create_tree_item (tree, NULL, "entry 3", menu);
+  // create_tree_item (tree, NULL, "entry 1", menu);
+  // create_tree_item (tree, NULL, "entry 2", menu);
+  // create_tree_item (tree, NULL, "entry 3", menu);
 
   /* test properties windows */
   /*  main_win = create_properties_dialog (NULL);

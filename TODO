@@ -1,8 +1,11 @@
-- configuration file: Use a edb file to store all configuration. We need to
-keep a variable inside the file to tell us all configuration
-available in the config file. Next we should be able to
-restore all the stored configuration. We should
-save all account inside one file accounts.edb 
+- Work on GUI:
+	- Work on menu popup, in fact we want to control all using
+	menupopup. So we need to create a mecanism to improve ewl menu.
+	- Work on the tree. We should be able to display different 
+	representation of the tree. Create a fusion display which regroup 
+	all your connection.
+	
+
 
 
 - about the core/*, it must contains of the stuff necessary to
@@ -11,11 +14,6 @@ do all possible job with eim (load/save/control connection).
 
 HIGH URGENCY
 - We need to make some important job about the core of EIM.
-- In fact, we need to be able to have several Jabber account, so we need
-  to manage in the core of eim the configuration of each account, for now 
-  nothing has been done in this way. We need to create a core/directory which
-  manage all the important stuff of the eim. Load/Save/ each properties using
-  the edb_config system.
 - prepare callback association, maybe create a structure containing all callback.
   Or maybe we should make a cleaner stuff in function of the protocol used.
 

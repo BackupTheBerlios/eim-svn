@@ -38,11 +38,23 @@ struct _Egxp_Connection {
   /* address to the host */
   char * host_addr;
 
+  /* the port to connect */
+  unsigned int port;
+
   /* a flag to know if we use ssl connection */
   unsigned char use_ssl;
   
-  /* the port to connect */
-  unsigned int port;
+  /* ignore ssl warning */
+  unsigned char ignore_ssl_warning;
+
+  /* if we need to send a keep alive packet*/
+  unsigned char send_keep_alive;
+
+  /* if we need to connect on startup */
+  unsigned char auto_connect;
+
+  /* when there is a disconnection, try to reconnect */
+  unsigned char auto_reconnect;
 };
 
 

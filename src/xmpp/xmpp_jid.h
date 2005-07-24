@@ -76,4 +76,14 @@ char * xmpp_jid_get_full (Xmpp_JID * jid);
  * @return true if a user is set, false otherwise.
  */
 unsigned int xmpp_jid_has_user (Xmpp_JID * jid);
+
+
+/**
+ * Set the resource to the structure
+ * @param jid: the Xmpp_JID resource
+ * @param resource: the resource name
+ */
+void xmpp_jid_set_resource (Xmpp_JID * jid, char * resource); 
+
+
 #endif

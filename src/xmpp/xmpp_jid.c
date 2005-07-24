@@ -164,3 +164,12 @@ unsigned int xmpp_jid_has_user (Xmpp_JID * jid) {
   assert (jid);
   return jid->user != NULL;
 }
+
+
+void xmpp_jid_set_resource (Xmpp_JID * jid, char * resource) {
+#ifdef XMPP_DEBUG
+  printf("TRACE: xmpp_jid_set_resource\n");
+#endif 
+  IF_FREE (jid->resource);
+  jid->resource = strdup (resource);
+}

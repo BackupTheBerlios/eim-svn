@@ -1,3 +1,9 @@
+2005-07-24(jol):
+	- Improve the work around account configiuration. I've made some work 
+	to load account properties. 
+	- Work on the core of eim.
+	
+	
 2005-06-03(jol):
 	- create the core directory, it should contains all stuff about
 	  eim. Begin to think about core structure and how to save in good

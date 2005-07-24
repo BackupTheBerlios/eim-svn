@@ -2,10 +2,12 @@ noinst_LTLIBRARIES = libcore.la
 
 pkgincludeinputdir = $(pkgincludedir)/core
 pkgincludeinput_HEADERS= \
-	eim.h       
+	eim.h            \
+	account_properties.h
 
 libcore_la_SOURCES =      \
-	eim.c       
+	eim.c             \
+	account_properties.c
 
 libcore_la_CFLAGS = \
 	-I$(top_srcdir)/src                 \

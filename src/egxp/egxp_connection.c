@@ -35,9 +35,21 @@ Egxp_Connection * egxp_connection_new (char * address, unsigned int port, unsign
  
   tmp->server = NULL;
   tmp->host_addr = strdup (address);
-  tmp->use_ssl = use_ssl;
+
+  /* if port equals to zero, set a default port */
+  if( port == 0) {
+    if(use_ssl) port = 5223;
+    else port = 5222;
+  }
+  
   tmp->port = port;
   
+  tmp->use_ssl = use_ssl;
+  tmp->ignore_ssl_warning = 0;
+  tmp->send_keep_alive = 0;
+  tmp->auto_connect = 0;
+  tmp->auto_reconnect = 0;
+
   return tmp;
 }
 
